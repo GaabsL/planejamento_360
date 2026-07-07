@@ -1,0 +1,8 @@
+{
+  "name": "Planejamento 360 Assai ",
+  "description": "Planejamento 360 graus para o Dia Imbatível do Assaí Atacadista - Redes Sociais, WhatsApp, Pushes e Gatilhos Off-line.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

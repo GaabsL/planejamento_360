@@ -1,0 +1,2645 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Planejamento 360º - Assaí Atacadista</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;750&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <!-- Tailwind v3 CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              assaiBlue: '#004696',
+              assaiDarkBlue: '#002b62',
+              assaiLightBlue: '#003674',
+              assaiOrange: '#FF7300',
+              assaiGold: '#FFAA00',
+              assaiYellow: '#FFDC00',
+            },
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              display: ['Space Grotesk', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.02);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(255, 115, 0, 0.3);
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 115, 0, 0.5);
+      }
+    </style>
+  </head>
+  <body class="bg-slate-950 text-slate-100 min-h-screen font-sans flex flex-col relative overflow-x-hidden selection:bg-assaiOrange selection:text-white">
+    <!-- Beautiful Ambient Background Blobs -->
+    <div class="absolute bottom-0 right-0 w-80 h-80 bg-assaiGold/10 rounded-full blur-[100px] -mr-40 -mb-40 pointer-events-none select-none z-0"></div>
+    <div class="absolute top-1/3 left-0 w-64 h-64 bg-assaiOrange/5 rounded-full blur-[80px] -ml-32 pointer-events-none select-none z-0"></div>
+    <div class="absolute top-10 right-1/4 w-96 h-96 bg-blue-600/5 rounded-full blur-[120px] pointer-events-none select-none z-0"></div>
+
+    <!-- Header Panel -->
+    <header class="sticky top-0 z-50 bg-assaiBlue border-b border-white/10 px-4 py-3 md:px-8 md:py-4 shadow-xl flex items-center justify-between" id="app-header">
+      <div class="flex items-center gap-4">
+        <!-- Logo -->
+        <div class="inline-flex items-center justify-center" id="assai-logo-container">
+          <img src="https://i.imgur.com/wCZYLnN.png" alt="Assaí Atacadista" class="h-10 md:h-12 w-auto object-contain max-w-full block" referrerPolicy="no-referrer">
+        </div>
+        <div class="h-10 w-px bg-white/20 hidden md:block ml-2"></div>
+        <div class="hidden sm:flex flex-col">
+          <span class="text-assaiYellow font-display font-bold text-[10px] tracking-[0.22em] uppercase leading-none">REDE NACIONAL ASSAÍ</span>
+          <span class="text-sm font-semibold tracking-tight text-white/95 mt-1">Atração de Novos Seguidores</span>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="flex items-center gap-3" id="app-header-controls">
+        <div class="bg-white/5 p-1 rounded-xl border border-white/10 flex items-center">
+          <button id="toggle-view-slides" onclick="setViewMode('slides')" class="px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wider flex items-center gap-1.5 transition-all cursor-pointer bg-assaiOrange text-white shadow-lg font-bold" title="Modo Apresentação">
+            <i data-lucide="presentation" class="w-3.5 h-3.5"></i>
+            <span class="hidden md:inline">Slides</span>
+          </button>
+          <button id="toggle-view-report" onclick="setViewMode('report')" class="px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wider flex items-center gap-1.5 transition-all cursor-pointer text-white/60 hover:text-white" title="Modo Relatório de Página Única">
+            <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+            <span class="hidden md:inline">Relatório</span>
+          </button>
+        </div>
+
+        <button id="btn-fullscreen-toggle" onclick="toggleFullscreen()" class="p-2 rounded-xl bg-white/5 border border-white/10 text-assaiGold hover:text-white transition-all cursor-pointer hover:bg-white/10 active:scale-95" title="Tela Cheia">
+          <i data-lucide="maximize-2" class="w-4 h-4 text-assaiGold"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Frame -->
+    <div class="flex-1 flex flex-row relative z-10 w-full min-h-0" id="app-root-container">
+      
+      <!-- Side Bar Navigation - Compact and optimized vertical sidebar (Hidden) -->
+      <aside class="hidden w-40 xs:w-44 sm:w-48 md:w-52 bg-slate-900/60 border-r border-white/10 p-2 sm:p-3 shrink-0 flex flex-col justify-between" id="presenter-sidebar">
+        <div class="flex flex-col h-full">
+          <div class="flex items-center justify-between mb-3 pb-1.5 border-b border-white/10">
+            <h3 class="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5 font-display">
+              <span class="w-1 h-3 bg-assaiOrange rounded-sm"></span>
+              Slide
+            </h3>
+            <span class="text-[9px] font-mono text-assaiGold font-semibold bg-white/5 border border-white/10 px-1.5 py-0.5 rounded">13 Pgs</span>
+          </div>
+
+          <!-- Quick List Indices - Compact and strictly vertical layout -->
+          <div class="flex flex-col gap-1 overflow-y-auto max-h-[calc(100vh-140px)] pr-0.5" id="sidebar-slide-items"></div>
+        </div>
+
+        <!-- Sidebar Footer - Compact and modern -->
+        <div class="mt-2 pt-2 border-t border-white/5 flex items-center justify-between text-[8px] text-slate-500 font-mono">
+          <span>Assaí 360º</span>
+          <span>v1.0.2</span>
+        </div>
+      </aside>
+
+      <!-- Viewports -->
+      <main class="flex-grow flex flex-col justify-between overflow-x-hidden min-w-0" id="deck-display-viewport">
+        
+        <!-- View Mode 1: Interactive Slideshow -->
+        <div class="flex-1 flex flex-col justify-between p-4 md:p-8 lg:p-10" id="slide-presentation-inner">
+          <div class="flex-1 bg-gradient-to-b from-assaiBlue to-assaiDarkBlue rounded-3xl p-6 md:p-10 border border-white/10 flex flex-col justify-between shadow-2xl relative min-h-[480px] overflow-hidden" id="active-slide-card">
+            <!-- Grid watermark background -->
+            <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none select-none z-0"></div>
+            
+            <!-- Top tracking info line -->
+            <div class="flex items-center justify-between text-xs text-slate-300/80 z-10 border-b border-white/10 pb-3 mb-4">
+              <div class="flex items-center gap-1.5 font-mono">
+                <span class="w-2.5 h-2.5 bg-assaiOrange rounded-full animate-pulse"></span>
+                <span class="tracking-wide text-xs uppercase font-bold text-white/90">PLANEJAMENTO DE NOVOS SEGUIDORES</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span id="slide-header-category" class="px-2 py-0.5 bg-white/5 border border-white/10 text-assaiGold rounded text-[10px] font-mono tracking-wider font-bold">Abertura</span>
+                <span class="font-semibold text-assaiYellow font-mono bg-white/5 px-2.5 py-0.5 rounded border border-white/10">
+                  <span id="header-current-slide-num">1</span> / <span id="header-total-slides-num">14</span>
+                </span>
+              </div>
+            </div>
+
+            <!-- Main Render Area -->
+            <div class="flex-grow flex flex-col justify-center z-10 transition-all duration-300" id="slides-content-slot"></div>
+
+            <!-- Bottom License/Branding Line -->
+            <div class="mt-8 pt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-300 font-sans z-10">
+              <span class="font-light text-slate-300">Estratégia de Conteúdo Orgânico</span>
+              <div class="hidden sm:flex items-center gap-2 text-[10px] font-mono text-slate-400">
+                <span class="text-assaiYellow font-bold">ASSAÍ ATACADISTA</span>
+                <span class="w-1.5 h-1.5 rounded-full bg-white/20"></span>
+                <span>MEGAMIDIA GROUP</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide Controls Progress Bar -->
+          <div class="mt-5 flex items-center justify-between bg-white/5 border border-white/10 p-3 rounded-2xl gap-4 z-10" id="presentation-footer-bar">
+            <div class="flex items-center gap-2">
+              <button id="btn-slide-prev" onclick="navigateSlide(-1)" class="p-3 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 transition-all disabled:opacity-35 disabled:cursor-not-allowed cursor-pointer active:scale-95 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> Anterior
+              </button>
+              <span class="px-3 text-slate-400 text-xs font-mono font-medium hidden sm:inline-block">
+                Progresso: <strong class="text-white" id="footer-progress-percentage-val">9%</strong>
+              </span>
+            </div>
+
+            <!-- Navigation Dots -->
+            <div class="hidden md:flex items-center gap-1.5" id="slide-index-dots-container"></div>
+
+            <div class="flex items-center gap-2">
+              <button id="btn-slide-next" onclick="navigateSlide(1)" class="p-3 rounded-xl bg-assaiOrange hover:bg-assaiGold text-white font-semibold transition-all disabled:opacity-35 disabled:cursor-not-allowed cursor-pointer active:scale-95 flex items-center gap-1.5 text-xs uppercase tracking-wider shadow-md">
+                Próximo <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- View Mode 2: Executive Continuous Single-Page Report -->
+        <div class="flex-1 p-4 md:p-8 lg:p-10 space-y-12 hidden" id="report-view-container">
+          <div class="bg-gradient-to-r from-assaiBlue to-assaiDarkBlue rounded-3xl p-6 md:p-8 border border-white/10 shadow-xl relative overflow-hidden text-center max-w-4xl mx-auto">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-assaiOrange/10 rounded-full blur-2xl"></div>
+            <h2 class="text-xl md:text-3xl font-display font-black text-assaiYellow uppercase tracking-wide">Relatório Executivo Integrado</h2>
+            <p class="text-xs md:text-sm text-slate-200 mt-2 max-w-xl mx-auto font-light">Consulte a estratégia 360° completa de forma contínua e vertical, otimizada para estudo, leituras executivas rápidas ou impressão digital!</p>
+            <div class="mt-4 flex items-center justify-center gap-3 flex-wrap text-xs text-slate-300">
+              <span class="bg-white/5 border border-white/10 px-3 py-1 rounded-full">🏢 Assaí Atacadista</span>
+              <span class="bg-white/5 border border-white/10 px-3 py-1 rounded-full font-bold text-assaiOrange">📅 Dia 25 de Junho</span>
+              <span class="bg-white/5 border border-white/10 px-3 py-1 rounded-full">🎯 Estratégia 360 Graus</span>
+            </div>
+          </div>
+
+          <!-- Stack sequential pages vertically -->
+          <div class="space-y-12 max-w-4xl mx-auto" id="report-list-slot"></div>
+
+          <div class="text-center py-8">
+            <button onclick="setViewMode('slides'); goToSlide(0);" class="px-6 py-3.5 bg-assaiOrange hover:bg-assaiGold text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer shadow-lg active:scale-95 inline-flex items-center gap-2">
+              <i data-lucide="presentation" class="w-4 h-4"></i> Iniciar Apresentação Interativa
+            </button>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Lucide Vector Icons Library -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Unified Slides Data and JavaScript Engine -->
+    <script>
+      const slidesData = [
+        {
+          id: "capa",
+          number: 1,
+          category: "Abertura",
+          title: "Instagram Assaí",
+          subtitle: "Estratégia de Conteúdo Orgânico para Atração de Novos Seguidores"
+        },
+        {
+          id: "crescimento",
+          number: 2,
+          category: "Desempenho",
+          title: "Crescimento de Seguidores @assaiatacadistaoficial",
+          subtitle: "Histórico @assaiatacadistaoficial"
+        },
+        {
+          id: "cenario-mercado",
+          number: 3,
+          category: "Cenário de Mercado",
+          title: "O Cenário de Mercado",
+          subtitle: "Contexto de Varejo Alimentar (NielsenIQ/ABRAS 2026)"
+        },
+        {
+          id: "cenario-digital",
+          number: 4,
+          category: "Cenário do Digital",
+          title: "O Cenário do Digital",
+          subtitle: "Abordagem & Mudança de Comportamento"
+        },
+        {
+          id: "concorrencia",
+          number: 5,
+          category: "Competitividade",
+          title: "Os Seguidores da Concorrência",
+          subtitle: "Comparativo de Base (Instagram)"
+        },
+        {
+          id: "desafio-objetivo",
+          number: 6,
+          category: "Metas & Objetivos",
+          title: "O Grande Desafio e Objetivo Estratégico",
+          subtitle: "Os Motores de Crescimento"
+        },
+        {
+          id: "pilares",
+          number: 7,
+          category: "Direcionamento de Conteúdo",
+          title: "Pilares de Conteúdo Disruptivo",
+          subtitle: "Foco B2C e B2B"
+        },
+        {
+          id: "mecanicas",
+          number: 8,
+          category: "Mecânicas de Conversão",
+          title: "Mecânicas de Atração Rápida",
+          subtitle: "Automação & Conversão no Feed"
+        },
+        {
+          id: "algoritmo",
+          number: 9,
+          category: "Algoritmo Meta",
+          title: "Anatomia do Algoritmo: Qual Formato Traz Novos Seguidores?",
+          subtitle: "Formatos que Atraem Novos Seguidores"
+        },
+        {
+          id: "dia-imbativel",
+          number: 10,
+          category: "Alavanca de Aquisição",
+          title: "Transformar o Dia Imbatível em Alavanca de Aquisição",
+          subtitle: "Gatilhos de Urgência e FOMO"
+        },
+        {
+          id: "plano-escala",
+          number: 11,
+          category: "Cronograma",
+          title: "Plano de Implementação e Metodologia de Escala",
+          subtitle: "Fases do Cronograma"
+        },
+        {
+          id: "metricas",
+          number: 12,
+          category: "Métricas de Sucesso",
+          title: "Métricas de Sucesso e Próximos Passos",
+          subtitle: "KPIs & ROI"
+        },
+        {
+          id: "resumo",
+          number: 13,
+          category: "Resumo Estratégico",
+          title: "Resumo Nova Estratégia e Resultados",
+          subtitle: "Matriz Tática de Atração"
+        },
+        {
+          id: "obrigado",
+          number: 14,
+          category: "Encerramento",
+          title: "Obrigado!",
+          subtitle: "Estratégia de Conteúdo Orgânico • @assaiatacadistaoficial"
+        }
+      ];
+
+      // Sound bars data
+      const soundBarsHeights = [
+        8, 14, 10, 26, 35, 18, 42, 30, 52, 14, 20, 38, 48, 22, 26, 42, 55, 17, 10, 24, 38, 14, 
+        45, 18, 30, 54, 35, 16, 28, 49, 20, 25, 40, 14, 8, 17, 32, 45, 24, 12, 10, 18
+      ];
+
+      // Global audio handling
+      let gAudio = new Audio("https://www.image2url.com/r2/default/audio/1781198538983-df5c9366-ec5d-4718-80f0-91e02b3b208c.mp3");
+      let globalAudioPlaying = false;
+      let audioTimer = null;
+      let activeAudioParent = null;
+
+      function renderSlide(slide, contextClass = "presentation") {
+        const id = slide.id;
+        const prefix = contextClass === "report" ? `report-${id}` : `slides-${id}`;
+
+        switch (id) {
+          case "capa":
+            return `
+              <div class="flex flex-col items-center justify-center text-center py-12 px-6 md:py-20 h-full relative overflow-hidden" id="${prefix}">
+                <!-- Glowing subtle badge -->
+                <div class="inline-flex items-center gap-2.5 bg-assaiOrange/15 border border-assaiOrange/30 px-6 py-2.5 rounded-full mb-8 text-sm md:text-base font-bold text-[#ffffff] tracking-wider uppercase">
+                  <span class="w-2.5 h-2.5 rounded-full bg-assaiOrange animate-pulse"></span>
+                  Estratégia de Redes Sociais • 2026
+                </div>
+                <div class="mb-8 flex justify-center transform hover:scale-105 transition-transform duration-300">
+                  <img src="https://i.imgur.com/wCZYLnN.png" alt="Assaí" class="h-20 w-auto object-contain">
+                </div>
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-display font-black tracking-tight text-assaiYellow mt-4 mb-4 drop-shadow-lg leading-none uppercase">
+                  Instagram Assaí
+                </h1>
+                <h2 class="text-2xl md:text-3xl lg:text-4xl font-display font-bold text-white tracking-wide uppercase max-w-4xl px-8 py-5 border-y-2 border-assaiOrange/35 mt-3 leading-snug">
+                  Estratégia de Conteúdo Orgânico para Atração de Novos Seguidores
+                </h2>
+                <div class="flex items-center justify-center gap-4 mt-12 text-sm sm:text-base font-mono text-slate-300 border border-slate-800 bg-slate-900/60 px-8 py-5 rounded-2xl backdrop-blur-sm">
+                  <div class="flex items-center gap-2">
+                    <i data-lucide="instagram" class="w-5 h-5 text-pink-400"></i>
+                    <span>@assaiatacadistaoficial</span>
+                  </div>
+                </div>
+              </div>
+            `;
+          case "crescimento":
+            return `
+              <div class="space-y-8 py-4 animate-fade-in" id="${prefix}">
+                <div class="border-l-4 border-assaiOrange pl-4 py-1">
+                  <span class="text-xs sm:text-sm tracking-widest font-mono text-slate-400 uppercase">${slide.category}</span>
+                  <h2 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-assaiYellow">${slide.title}</h2>
+                  <p class="text-base sm:text-lg text-slate-300 font-mono font-medium">${slide.subtitle}</p>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                  <!-- Big Numbers -->
+                  <div class="lg:col-span-4 space-y-6">
+                    <div class="bg-slate-900/50 border border-white/5 rounded-3xl p-6 md:p-8 flex flex-col justify-between hover:border-assaiOrange/20 transition-all shadow-xl">
+                      <div>
+                        <span class="text-xs md:text-sm font-mono uppercase tracking-wider text-slate-400 block mb-1">Seguidores em 2025</span>
+                        <p class="text-3xl md:text-5xl font-black text-slate-300 font-display font-mono">4.257.873</p>
+                      </div>
+                      <div class="mt-6 pt-4 border-t border-slate-800">
+                        <span class="text-xs md:text-sm font-mono uppercase tracking-wider text-slate-400 block mb-1">Seguidores em 2026</span>
+                        <p class="text-3xl md:text-5xl lg:text-6xl font-black text-assaiOrange font-display flex items-baseline gap-2 font-mono">
+                          4.464.078
+                          <span class="text-xs text-slate-400 font-normal font-sans">(até 31/06/2026)</span>
+                        </p>
+                      </div>
+                    </div>
+
+                    <!-- Growth Metric Callout -->
+                    <div class="bg-gradient-to-br from-[#003674]/50 to-assaiBlue/40 border border-white/10 rounded-2xl p-6 flex items-center gap-4">
+                      <div class="w-14 h-14 rounded-full bg-emerald-500/15 flex items-center justify-center text-emerald-400 shrink-0 shadow-lg">
+                        <i data-lucide="trending-up" class="w-7 h-7"></i>
+                      </div>
+                      <div>
+                        <h4 class="text-base font-bold text-white uppercase">Crescimento Orgânico</h4>
+                        <p class="text-lg font-black text-emerald-400 font-mono">+206.205 Seguidores</p>
+                        <p class="text-xs text-slate-400">Expansão contínua de base qualificada</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Glowing Vector Graph -->
+                  <div class="lg:col-span-8 bg-slate-900/30 border border-slate-800 rounded-3xl p-6 md:p-8 shadow-2xl flex flex-col justify-between relative overflow-hidden">
+                    <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
+                      <h4 class="text-sm md:text-base font-bold uppercase text-slate-200 tracking-wider font-mono flex items-center gap-2">
+                        <i data-lucide="line-chart" class="w-5 h-5 text-assaiOrange"></i> Gráfico de Evolução de Seguidores
+                      </h4>
+                      <span class="px-3 py-1 bg-white/5 border border-white/10 text-assaiGold rounded-full text-xs font-mono font-bold">2025 vs 2026</span>
+                    </div>
+                    
+                    <div class="relative w-full h-64 md:h-80 flex items-center justify-center px-2">
+                      <svg class="w-full h-full" viewBox="0 0 500 220" preserveAspectRatio="none">
+                        <defs>
+                          <linearGradient id="chart-glow" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#FF7300" stop-opacity="0.3"/>
+                            <stop offset="100%" stop-color="#FF7300" stop-opacity="0"/>
+                          </linearGradient>
+                        </defs>
+                        <line x1="10" y1="20" x2="490" y2="20" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                        <line x1="10" y1="70" x2="490" y2="70" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                        <line x1="10" y1="120" x2="490" y2="120" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                        <line x1="10" y1="170" x2="490" y2="170" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                        <path d="M 50 170 Q 250 110, 450 40 L 450 170 L 50 170 Z" fill="url(#chart-glow)" />
+                        <path d="M 50 170 Q 250 110, 450 40" fill="none" stroke="#FF7300" stroke-width="4.5" stroke-linecap="round" />
+                        <path d="M 50 170 Q 250 110, 450 40" fill="none" stroke="#FFAA00" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3,3" />
+                        <circle cx="50" cy="170" r="7" fill="#004696" stroke="#FF7300" stroke-width="3" />
+                        <circle cx="450" cy="40" r="7" fill="#004696" stroke="#FFAA00" stroke-width="3" class="animate-pulse" />
+                      </svg>
+                      
+                      <!-- Absolute positioned HTML overlays to prevent font deformity -->
+                      <div class="absolute left-[8%] bottom-[30%] font-mono text-[10px] md:text-xs font-bold text-slate-300 bg-slate-950/90 px-2 py-1 rounded border border-white/10 shadow-lg">4.257.873 (2025)</div>
+                      <div class="absolute right-[8%] top-[15%] font-mono text-[10px] md:text-xs font-bold text-assaiGold bg-slate-950/90 px-2 py-1 rounded border border-assaiOrange/40 shadow-lg">4.464.078 (2026)</div>
+                      <div class="absolute left-[8%] bottom-[2%] font-mono text-[9px] md:text-[10px] text-slate-500">Início Jan/2025</div>
+                      <div class="absolute right-[8%] bottom-[2%] font-mono text-[9px] md:text-[10px] text-slate-500">Atual Jun/2026</div>
+                    </div>
+                    
+                    <p class="text-sm md:text-base text-slate-300 italic text-center leading-relaxed mt-4">
+                      O gráfico evidencia o salto substancial e contínuo de novos seguidores orgânicos, consolidando a marca.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            `;
+          case "cenario-mercado":
+            return `
+              <div class="space-y-8 py-4 animate-fade-in" id="${prefix}">
+                <div class="border-l-4 border-assaiGold pl-4 py-1">
+                  <span class="text-xs sm:text-sm tracking-widest font-mono text-slate-400 uppercase">${slide.category}</span>
+                  <h2 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-assaiYellow">${slide.title}</h2>
+                  <p class="text-base sm:text-lg text-slate-300 font-mono font-medium">${slide.subtitle}</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
+                  <!-- Nielsen ABRAS card -->
+                  <div class="bg-gradient-to-br from-slate-900/60 to-slate-950/80 border border-white/5 rounded-3xl p-8 hover:border-assaiOrange/20 transition-all flex flex-col justify-between shadow-2xl">
+                    <div>
+                      <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 rounded-2xl bg-assaiOrange/10 text-assaiOrange flex items-center justify-center shadow-lg border border-assaiOrange/10">
+                          <i data-lucide="trending-up" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="font-display font-bold text-xl md:text-2xl text-white">Contexto de Mercado (NielsenIQ/ABRAS 2026)</h3>
+                      </div>
+                      <p class="text-base md:text-lg lg:text-xl text-slate-200 leading-relaxed font-light">
+                        O atacarejo mantém-se como o canal de melhor desempenho do varejo alimentar (alta de 8,8% nas vendas). No entanto, o preço baixo voltou a ser o principal critério de escolha devido à pressão no orçamento das famílias.
+                      </p>
+                    </div>
+                    <div class="mt-8 pt-6 border-t border-slate-800 flex items-center gap-5">
+                      <span class="text-5xl md:text-6xl lg:text-7xl font-black text-assaiOrange font-display font-mono tracking-tight leading-none">8,8%</span>
+                      <div>
+                        <span class="text-xs md:text-sm font-mono uppercase tracking-wider text-slate-400 block">Alta de Vendas</span>
+                        <p class="text-sm md:text-base text-slate-200 font-medium leading-tight">Canal de melhor desempenho do varejo alimentar</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Shopping Brasil card -->
+                  <div class="bg-gradient-to-br from-slate-900/60 to-slate-950/80 border border-white/5 rounded-3xl p-8 hover:border-assaiGold/20 transition-all flex flex-col justify-between shadow-2xl">
+                    <div>
+                      <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 rounded-2xl bg-assaiGold/10 text-assaiGold flex items-center justify-center shadow-lg border border-assaiGold/10">
+                          <i data-lucide="smartphone" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="font-display font-bold text-xl md:text-2xl text-white">Dado Chave do Digital</h3>
+                      </div>
+                      <p class="text-base md:text-lg lg:text-xl text-slate-200 leading-relaxed font-light">
+                        Segundo a Shopping Brasil, a presença de ofertas de varejo nas redes sociais saltou para 57%. O digital funciona como o gatilho absoluto de tráfego, enquanto a loja física atua como o fechamento.
+                      </p>
+                    </div>
+                    <div class="mt-8 pt-6 border-t border-slate-800 flex items-center gap-5">
+                      <span class="text-5xl md:text-6xl lg:text-7xl font-black text-assaiGold font-display font-mono tracking-tight leading-none">57%</span>
+                      <div>
+                        <span class="text-xs md:text-sm font-mono uppercase tracking-wider text-slate-400 block">Presença Social</span>
+                        <p class="text-sm md:text-base text-slate-200 font-medium leading-tight">Presença de ofertas de varejo em redes digitais</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Diagnostic Highlighting Box -->
+                <div class="bg-gradient-to-r from-assaiBlue/40 to-assaiDarkBlue/40 border-2 border-assaiYellow/30 rounded-3xl p-6 md:p-8 mt-8 shadow-2xl relative overflow-hidden">
+                  <div class="absolute -right-16 -bottom-16 w-44 h-44 bg-assaiYellow/5 rounded-full blur-3xl pointer-events-none"></div>
+                  <div class="flex flex-col lg:flex-row gap-5 items-start">
+                    <div class="w-12 h-12 rounded-xl bg-assaiYellow/20 text-assaiYellow flex items-center justify-center shrink-0 shadow-lg border border-assaiYellow/10">
+                      <i data-lucide="lightbulb" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                      <span class="text-xs md:text-sm font-bold font-mono text-assaiYellow tracking-widest block uppercase mb-1">O Diagnóstico Estratégico</span>
+                      <p class="text-base md:text-lg lg:text-xl text-white leading-relaxed font-semibold">
+                        O Diagnóstico: O segredo para atrair seguidores em massa não é replicar o tabloide físico ou chamadas de ofertas na plataforma; é dar um <span class="text-assaiYellow underline decoration-wavy decoration-assaiOrange/60 underline-offset-4 font-bold">motivo diário de utilidade</span> para o usuário apertar o botão "Seguir". Este é um alinhamento estratégico com as novas diretrizes de recomendação do algoritmo da Meta (2025/2026) e aplicação do conceito de <span class="text-assaiGold font-bold font-sans">Utility Marketing</span> voltado ao varejo de alta frequência.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+          case "cenario-digital":
+            return `
+              <div class="space-y-8 py-4 animate-fade-in" id="${prefix}">
+                <div class="border-l-4 border-cyan-400 pl-4 py-1">
+                  <span class="text-xs sm:text-sm tracking-widest font-mono text-slate-400 uppercase">${slide.category}</span>
+                  <h2 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-assaiYellow">${slide.title}</h2>
+                  <p class="text-base sm:text-lg text-slate-300 font-mono font-medium">${slide.subtitle}</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
+                  <!-- Col 1 -->
+                  <div class="bg-slate-900/40 border border-slate-800 rounded-3xl p-6 md:p-8 hover:border-cyan-500/20 transition-all flex flex-col justify-between shadow-lg">
+                    <div>
+                      <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center shadow-lg border border-cyan-500/20">
+                          <i data-lucide="instagram" class="w-6 h-6 animate-pulse"></i>
+                        </div>
+                        <h3 class="font-display font-bold text-xl md:text-2xl text-white">1. Mudança de Comportamento no Algoritmo</h3>
+                      </div>
+                      <ul class="space-y-5 text-base md:text-lg text-slate-200">
+                        <li class="flex items-start gap-3">
+                          <i data-lucide="video" class="w-5 h-5 text-cyan-400 shrink-0 mt-1"></i>
+                          <p>A Meta mudou a entrega do algoritmo para priorizar conteúdo de recomendação (com foco no Reels).</p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                          <i data-lucide="check-circle-2" class="w-5 h-5 text-cyan-400 shrink-0 mt-1"></i>
+                          <p>Vídeos que trazem "utilidade prática" recebem mais salvamentos e compartilhamentos.</p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                          <i data-lucide="help-circle" class="w-5 h-5 text-cyan-400 shrink-0 mt-1"></i>
+                          <p>Usuários não seguem mais marcas para receber anúncios passivos (o antigo tabloide), mas sim perfis que geram resolução de problemas cotidianos.</p>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <!-- Col 2 -->
+                  <div class="bg-slate-900/40 border border-slate-800 rounded-3xl p-6 md:p-8 hover:border-assaiOrange/20 transition-all flex flex-col justify-between shadow-lg">
+                    <div>
+                      <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 rounded-2xl bg-assaiOrange/10 text-assaiOrange flex items-center justify-center shadow-lg border border-assaiOrange/20">
+                          <i data-lucide="award" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="font-display font-bold text-xl md:text-2xl text-white">2. Conceito de "Hub de Utilidade"</h3>
+                      </div>
+                      <ul class="space-y-5 text-base md:text-lg text-slate-200">
+                        <li class="flex items-start gap-3">
+                          <i data-lucide="lightbulb" class="w-5 h-5 text-assaiOrange shrink-0 mt-1"></i>
+                          <p>Ancorado no conceito de <span class="text-assaiYellow font-semibold">Youtility (Jay Baer)</span>, que prova que o marketing de utilidade gera maior conversão e retenção do que a pura exposição do produto.</p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                          <i data-lucide="users" class="w-5 h-5 text-assaiOrange shrink-0 mt-1"></i>
+                          <p>No atacarejo, o segredo da atração em massa está em transformar a marca de um "vendedor de insumos" para um <span class="text-white font-bold">"parceiro de economia e negócios"</span>.</p>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+          case "concorrencia":
+            return `
+              <div class="space-y-8 py-4 animate-fade-in" id="${prefix}">
+                <div class="border-l-4 border-emerald-400 pl-4 py-1">
+                  <span class="text-xs sm:text-sm tracking-widest font-mono text-slate-400 uppercase">${slide.category}</span>
+                  <h2 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-assaiYellow">${slide.title}</h2>
+                  <p class="text-base sm:text-lg text-slate-300 font-mono font-medium">${slide.subtitle}</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                  <!-- Ranking Table / Chart -->
+                  <div class="lg:col-span-7 bg-slate-900/40 border border-slate-800 rounded-3xl p-6 md:p-8 shadow-xl flex flex-col justify-between">
+                    <div>
+                      <h3 class="text-lg md:text-xl font-bold text-white mb-6 flex items-center gap-2">
+                        <i data-lucide="award" class="w-5.5 h-5.5 text-emerald-400"></i> Ranking de Seguidores por Rede (Instagram)
+                      </h3>
+                      
+                      <!-- Visual Horizontal Bar Chart -->
+                      <div class="space-y-4">
+                        <!-- Assai -->
+                        <div class="bg-slate-950/40 p-4 rounded-2xl border border-assaiOrange/30 space-y-3 shadow-[0_0_15px_rgba(255,115,0,0.1)]">
+                          <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2.5">
+                              <div class="w-9 h-9 rounded-xl bg-assaiOrange/10 text-assaiOrange flex items-center justify-center border border-assaiOrange/20 shadow-inner">
+                                <i data-lucide="trophy" class="w-4.5 h-4.5 animate-pulse"></i>
+                              </div>
+                              <div>
+                                <span class="text-base font-black text-white tracking-wide uppercase font-sans">1. Assaí Atacadista</span>
+                                <span class="px-2 py-0.5 bg-assaiOrange text-white text-[9px] font-black uppercase rounded tracking-wider mt-0.5 inline-block">1º Lugar • Líder</span>
+                              </div>
+                            </div>
+                            <span class="font-mono text-2xl font-black text-assaiYellow">4.464.078</span>
+                          </div>
+                          <div class="w-full bg-slate-950 h-5 rounded-full overflow-hidden p-0.5 border border-assaiOrange/30">
+                            <div class="bg-gradient-to-r from-assaiOrange to-assaiYellow h-full rounded-full shadow-[0_0_12px_rgba(255,115,0,0.4)]" style="width: 100%"></div>
+                          </div>
+                        </div>
+
+                        <!-- Atacadao -->
+                        <div class="bg-slate-950/40 p-4 rounded-2xl border border-white/5 space-y-3">
+                          <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2.5">
+                              <div class="w-9 h-9 rounded-xl bg-orange-500/10 text-orange-400 flex items-center justify-center border border-orange-500/20 shadow-inner">
+                                <i data-lucide="building" class="w-4.5 h-4.5"></i>
+                              </div>
+                              <div>
+                                <span class="text-base font-black text-white tracking-wide uppercase font-sans">2. Atacadão</span>
+                                <span class="text-[10px] font-mono text-orange-400/80 block uppercase tracking-wider font-semibold">Principal Concorrente</span>
+                              </div>
+                            </div>
+                            <span class="font-mono text-2xl font-black text-orange-400">3.983.179</span>
+                          </div>
+                          <div class="w-full bg-slate-950 h-5 rounded-full overflow-hidden p-0.5 border border-orange-500/20">
+                            <div class="bg-gradient-to-r from-orange-600 to-orange-400 h-full rounded-full shadow-[0_0_12px_rgba(249,115,22,0.3)]" style="width: 89.2%"></div>
+                          </div>
+                        </div>
+
+                        <!-- Super BH -->
+                        <div class="bg-slate-950/40 p-4 rounded-2xl border border-white/5 space-y-3">
+                          <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2.5">
+                              <div class="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center border border-blue-500/20 shadow-inner">
+                                <i data-lucide="store" class="w-4.5 h-4.5"></i>
+                              </div>
+                              <div>
+                                <span class="text-base font-black text-white tracking-wide uppercase font-sans">3. Supermercados BH</span>
+                                <span class="text-[10px] font-mono text-blue-400/80 block uppercase tracking-wider font-semibold">Foco Regional</span>
+                              </div>
+                            </div>
+                            <span class="font-mono text-2xl font-black text-blue-400">1.141.262</span>
+                          </div>
+                          <div class="w-full bg-slate-950 h-5 rounded-full overflow-hidden p-0.5 border border-blue-500/20">
+                            <div class="bg-gradient-to-r from-blue-600 to-blue-400 h-full rounded-full shadow-[0_0_12px_rgba(59,130,246,0.3)]" style="width: 25.5%"></div>
+                          </div>
+                        </div>
+
+                        <!-- Muffato -->
+                        <div class="bg-slate-950/40 p-4 rounded-2xl border border-white/5 space-y-3">
+                          <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2.5">
+                              <div class="w-9 h-9 rounded-xl bg-slate-500/10 text-slate-400 flex items-center justify-center border border-slate-500/20 shadow-inner">
+                                <i data-lucide="store" class="w-4.5 h-4.5"></i>
+                              </div>
+                              <div>
+                                <span class="text-base font-black text-white tracking-wide uppercase font-sans">4. Muffato</span>
+                                <span class="text-[10px] font-mono text-slate-400/80 block uppercase tracking-wider font-semibold">Paraná / interior SP</span>
+                              </div>
+                            </div>
+                            <span class="font-mono text-2xl font-black text-slate-400">390.104</span>
+                          </div>
+                          <div class="w-full bg-slate-950 h-5 rounded-full overflow-hidden p-0.5 border border-slate-500/20">
+                            <div class="bg-gradient-to-r from-slate-600 to-slate-400 h-full rounded-full shadow-[0_0_12px_rgba(148,163,184,0.3)]" style="width: 8.7%"></div>
+                          </div>
+                        </div>
+
+                        <!-- Grupo Mateus -->
+                        <div class="bg-slate-950/40 p-4 rounded-2xl border border-white/5 space-y-3">
+                          <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2.5">
+                              <div class="w-9 h-9 rounded-xl bg-red-500/10 text-red-400 flex items-center justify-center border border-red-500/20 shadow-inner">
+                                <i data-lucide="store" class="w-4.5 h-4.5"></i>
+                              </div>
+                              <div>
+                                <span class="text-base font-black text-white tracking-wide uppercase font-sans">5. Grupo Mateus</span>
+                                <span class="text-[10px] font-mono text-red-400/80 block uppercase tracking-wider font-semibold">Norte / Nordeste</span>
+                              </div>
+                            </div>
+                            <span class="font-mono text-2xl font-black text-red-400">384.114</span>
+                          </div>
+                          <div class="w-full bg-slate-950 h-5 rounded-full overflow-hidden p-0.5 border border-red-500/20">
+                            <div class="bg-gradient-to-r from-red-600 to-red-400 h-full rounded-full shadow-[0_0_12px_rgba(239,68,68,0.3)]" style="width: 8.6%"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Comparative strategic quote -->
+                  <div class="lg:col-span-5 bg-gradient-to-br from-[#003674]/40 to-slate-900/60 border border-slate-800 rounded-3xl p-6 md:p-8 flex flex-col justify-between shadow-xl">
+                    <div class="space-y-6">
+                      <div class="inline-flex items-center gap-2 bg-emerald-500/10 text-emerald-400 px-4 py-1.5 rounded-full text-xs font-mono font-bold border border-emerald-500/20">
+                        <i data-lucide="compass" class="w-4 h-4"></i> Estratégia de Atração
+                      </div>
+                      <h4 class="text-xl md:text-2xl font-display font-bold text-white">Eficiência de Custo Orgânico</h4>
+                      <p class="text-base md:text-lg text-slate-200 leading-relaxed font-light">
+                        Enquanto o principal concorrente direto (Atacadão) utiliza uma linha editorial contínua de aquisição apoiada em mídia paga, o Assaí usará a força do seu alcance orgânico através de Editorias de Alto Compartilhamento e Otimização de Pontos de Entrada fora das redes (Site, Blog e Lojas), gerando eficiência de custo.
+                      </p>
+                    </div>
+                    
+                    <div class="mt-8 pt-6 border-t border-slate-800 flex items-center gap-3">
+                      <span class="w-3 h-3 rounded-full bg-assaiOrange animate-pulse"></span>
+                      <span class="text-xs md:text-sm font-mono text-assaiGold font-bold uppercase tracking-widest">Atração Inteligente</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+          case "desafio-objetivo":
+            return `
+              <div class="space-y-8 py-4 animate-fade-in" id="${prefix}">
+                <div class="border-l-4 border-assaiOrange pl-4 py-1">
+                  <span class="text-xs sm:text-sm tracking-widest font-mono text-slate-400 uppercase">${slide.category}</span>
+                  <h2 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-assaiYellow">${slide.title}</h2>
+                  <p class="text-base sm:text-lg text-slate-300 font-mono font-medium">${slide.subtitle}</p>
+                </div>
+
+                <!-- Visual Stages grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+                  <!-- Stage 1 -->
+                  <div class="bg-gradient-to-b from-slate-900/60 to-slate-950/80 border border-white/5 border-t-4 border-t-red-500 rounded-3xl p-6 md:p-8 flex flex-col justify-between shadow-xl hover:scale-[1.02] hover:border-red-500/25 transition-all">
+                    <div>
+                      <div class="flex items-center justify-between mb-6">
+                        <span class="text-sm font-bold font-mono text-red-400 uppercase tracking-widest">01 • O Desafio</span>
+                        <div class="w-10 h-10 bg-red-500/15 text-red-400 rounded-xl flex items-center justify-center border border-red-500/10"><i data-lucide="shield-alert" class="w-5 h-5"></i></div>
+                      </div>
+                      <h4 class="text-lg md:text-xl font-bold text-white mb-4 font-sans">Romper o Ruído Digital</h4>
+                      <p class="text-base md:text-lg text-slate-200 leading-relaxed font-light">
+                        Gerar um ecossistema de atração orgânica acelerada.
+                      </p>
+                    </div>
+                  </div>
+
+                  <!-- Stage 2 -->
+                  <div class="bg-gradient-to-b from-slate-900/60 to-slate-950/80 border border-white/5 border-t-4 border-t-assaiGold rounded-3xl p-6 md:p-8 flex flex-col justify-between shadow-xl hover:scale-[1.02] hover:border-assaiGold/25 transition-all">
+                    <div>
+                      <div class="flex items-center justify-between mb-6">
+                        <span class="text-sm font-bold font-mono text-assaiGold uppercase tracking-widest">02 • O Objetivo</span>
+                        <div class="w-10 h-10 bg-assaiGold/15 text-assaiGold rounded-xl flex items-center justify-center border border-assaiGold/10"><i data-lucide="target" class="w-5 h-5"></i></div>
+                      </div>
+                      <h4 class="text-lg md:text-xl font-bold text-white mb-4 font-sans">Três Metas Principais</h4>
+                      <ul class="space-y-3 text-base md:text-lg text-slate-200">
+                        <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-assaiGold shrink-0"></i> 1) Atrair novos seguidores</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-assaiGold shrink-0"></i> 2) Reduzir a perda de audiência</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-assaiGold shrink-0"></i> 3) Fortalecer a comunidade até o fim do ano</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <!-- Stage 3 -->
+                  <div class="bg-gradient-to-b from-slate-900/60 to-slate-950/80 border border-white/5 border-t-4 border-t-emerald-400 rounded-3xl p-6 md:p-8 flex flex-col justify-between shadow-xl hover:scale-[1.02] hover:border-emerald-500/25 transition-all">
+                    <div>
+                      <div class="flex items-center justify-between mb-6">
+                        <span class="text-sm font-bold font-mono text-emerald-400 uppercase tracking-widest">03 • Motores</span>
+                        <div class="w-10 h-10 bg-emerald-500/15 text-emerald-400 rounded-xl flex items-center justify-center border border-emerald-500/10"><i data-lucide="cpu" class="w-5 h-5"></i></div>
+                      </div>
+                      <h4 class="text-lg md:text-xl font-bold text-white mb-4 font-sans">Os Dois Motores de Crescimento</h4>
+                      <div class="space-y-4 text-xs md:text-sm">
+                        <!-- Sub-card B2C -->
+                        <div class="bg-slate-950/40 p-3 rounded-xl border border-white/5 flex items-start gap-2.5">
+                          <i data-lucide="shopping-bag" class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5"></i>
+                          <div>
+                            <span class="font-bold text-white block">B2C (Shopper):</span>
+                            <span class="font-light text-slate-300">Conteúdo focado em ultraeconomia, fracionamento inteligente e combate ao desperdício doméstico.</span>
+                          </div>
+                        </div>
+                        <!-- Sub-card B2B -->
+                        <div class="bg-slate-950/40 p-3 rounded-xl border border-white/5 flex items-start gap-2.5">
+                          <i data-lucide="briefcase" class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5"></i>
+                          <div>
+                            <span class="font-bold text-white block">B2B (Empreendedor):</span>
+                            <span class="font-light text-slate-300">Conteúdo focado em margem de lucro, tendências e gestão de custo.</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+          case "pilares":
+            return `
+              <div class="space-y-8 py-4 animate-fade-in" id="${prefix}">
+                <div class="border-l-4 border-assaiYellow pl-4 py-1">
+                  <span class="text-xs sm:text-sm tracking-widest font-mono text-slate-400 uppercase">${slide.category}</span>
+                  <h2 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-assaiYellow">${slide.title}</h2>
+                  <p class="text-base sm:text-lg text-slate-300 font-mono font-medium">${slide.subtitle}</p>
+                </div>
+
+                <!-- Three Visual Columns -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+                  <!-- Pillar 1 -->
+                  <div class="bg-gradient-to-b from-slate-900/60 to-slate-950/80 border border-white/5 rounded-3xl p-6 md:p-8 flex flex-col justify-between shadow-2xl hover:border-assaiOrange/30 transition-all">
+                    <div>
+                      <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-800">
+                        <div class="w-12 h-12 bg-assaiOrange/10 text-assaiOrange rounded-2xl flex items-center justify-center shadow-lg"><i data-lucide="zap" class="w-6 h-6"></i></div>
+                        <h3 class="font-display font-bold text-lg md:text-xl text-white">Pilar 1: Hacks de Economia Real</h3>
+                      </div>
+                      <span class="text-xs font-bold font-mono text-assaiOrange uppercase tracking-wider block mb-2">Foco em B2C - Alta Escala</span>
+                      <div class="space-y-4 text-sm md:text-base">
+                        <div>
+                          <strong class="text-slate-300 block text-xs md:text-sm font-mono uppercase tracking-wider">O que é:</strong>
+                          <p class="text-slate-200 mt-1 font-light leading-relaxed">Reels ou conteúdos em carrossel rápidos mostrando transformações de ingredientes comprados em volume.</p>
+                          <p class="text-slate-300 italic text-xs md:text-sm mt-2 bg-slate-950/60 p-3 rounded-xl border border-white/5">Ex: Como transformar 1kg de proteína em 3 refeições diferentes e congeláveis.</p>
+                        </div>
+                        <div class="pt-2">
+                          <strong class="text-slate-300 block text-xs md:text-sm font-mono uppercase tracking-wider">Por que atrai:</strong>
+                          <p class="text-slate-200 mt-1 font-semibold">Gera valor imediato e salvamento de postagem.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Pillar 2 -->
+                  <div class="bg-gradient-to-b from-slate-900/60 to-slate-950/80 border border-white/5 rounded-3xl p-6 md:p-8 flex flex-col justify-between shadow-2xl hover:border-assaiGold/30 transition-all">
+                    <div>
+                      <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-800">
+                        <div class="w-12 h-12 bg-assaiGold/10 text-assaiGold rounded-2xl flex items-center justify-center shadow-lg"><i data-lucide="percent" class="w-6 h-6"></i></div>
+                        <h3 class="font-display font-bold text-lg md:text-xl text-white">Pilar 2: O Segredo da Margem</h3>
+                      </div>
+                      <span class="text-xs font-bold font-mono text-assaiGold uppercase tracking-wider block mb-2">Foco em B2B - Alta Autoridade</span>
+                      <div class="space-y-4 text-sm md:text-base">
+                        <div>
+                          <strong class="text-slate-300 block text-xs md:text-sm font-mono uppercase tracking-wider">O que é:</strong>
+                          <p class="text-slate-200 mt-1 font-light leading-relaxed">Conteúdo com foco em microempreendedores (transformadores).</p>
+                          <p class="text-slate-300 italic text-xs md:text-sm mt-2 bg-slate-950/60 p-3 rounded-xl border border-white/5">Ex: A matemática do lucro: Como calcular a margem do bolo de pote utilizando a proporção exata de insumos do Assaí.</p>
+                        </div>
+                        <div class="pt-2">
+                          <strong class="text-slate-300 block text-xs md:text-sm font-mono uppercase tracking-wider">Por que atrai:</strong>
+                          <p class="text-slate-200 mt-1 font-semibold">O público empreendedor compartilha massivamente em grupos de WhatsApp de nicho.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Pillar 3 -->
+                  <div class="bg-gradient-to-b from-slate-900/60 to-slate-950/80 border border-white/5 rounded-3xl p-6 md:p-8 flex flex-col justify-between shadow-2xl hover:border-cyan-400/30 transition-all">
+                    <div>
+                      <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-800">
+                        <div class="w-12 h-12 bg-cyan-500/10 text-cyan-400 rounded-2xl flex items-center justify-center shadow-lg"><i data-lucide="trending-up" class="w-6 h-6"></i></div>
+                        <h3 class="font-display font-bold text-lg md:text-xl text-white">Pilar 3: Trend-Oportunidade</h3>
+                      </div>
+                      <span class="text-xs font-bold font-mono text-cyan-400 uppercase tracking-wider block mb-2">Engajamento de Momento</span>
+                      <div class="space-y-4 text-sm md:text-base">
+                        <div>
+                          <strong class="text-slate-300 block text-xs md:text-sm font-mono uppercase tracking-wider">O que é:</strong>
+                          <p class="text-slate-200 mt-1 font-light leading-relaxed">Mostrar oportunidades de ofertas dentro de loja.</p>
+                          <div class="space-y-2 mt-2">
+                            <p class="text-slate-300 italic text-xs md:text-sm bg-slate-950/60 p-3 rounded-xl border border-white/5 leading-snug">Ex 1: Conheça os corredores de oportunidade no Assaí.</p>
+                            <p class="text-slate-300 italic text-xs md:text-sm bg-slate-950/60 p-3 rounded-xl border border-white/5 leading-snug">Ex 2: Saiba identificar quando um produto está na promoção!</p>
+                          </div>
+                        </div>
+                        <div class="pt-2">
+                          <strong class="text-slate-300 block text-xs md:text-sm font-mono uppercase tracking-wider">Por que atrai:</strong>
+                          <p class="text-slate-200 mt-1 font-semibold">Usa o algoritmo a favor para expandir alcance orgânico imediatamente.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+          case "mecanicas":
+            return `
+              <div class="space-y-8 py-4 animate-fade-in" id="${prefix}">
+                <div class="border-l-4 border-assaiOrange pl-4 py-1">
+                  <span class="text-xs sm:text-sm tracking-widest font-mono text-slate-400 uppercase">${slide.category}</span>
+                  <h2 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-assaiYellow">${slide.title}</h2>
+                  <p class="text-base sm:text-lg text-slate-300 font-mono font-medium">${slide.subtitle}</p>
+                </div>
+
+                <div class="bg-slate-900/30 border border-slate-800 rounded-2xl p-4 md:p-6 text-slate-200">
+                  <p class="text-base md:text-xl font-bold italic text-white flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-assaiOrange"></span>
+                    A Quebra de Padrão no Feed: Substituir o tradicional "Siga nosso perfil para mais ofertas" por gatilhos de benefício tangível.
+                  </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                  <!-- Schema visual for Mecânica 1 (Comente e Receba) -->
+                  <div class="lg:col-span-8 flex flex-col justify-between gap-6">
+                    <div class="bg-slate-900/40 border border-slate-800 rounded-3xl p-6 md:p-8 hover:border-assaiOrange/20 transition-all flex-grow">
+                      <div class="flex items-center gap-3 mb-6 pb-2 border-b border-slate-800">
+                        <div class="w-10 h-10 bg-assaiOrange/10 text-assaiOrange rounded-xl flex items-center justify-center"><i data-lucide="message-square" class="w-5 h-5"></i></div>
+                        <h4 class="text-xl font-bold text-white font-sans">Mecânica 1: Comente e Receba (Automação Direct)</h4>
+                      </div>
+
+                      <!-- Step-by-Step Flow Pipeline Vector Schema -->
+                      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 relative py-2">
+                        <!-- Pipeline Connector Line for desktop (only visible on medium screens and up) -->
+                        <div class="hidden md:block absolute top-[44%] left-[10%] right-[10%] h-0.5 bg-gradient-to-r from-emerald-500 via-cyan-500 to-pink-500/40 z-0"></div>
+                        
+                        <!-- Step 1 -->
+                        <div class="bg-slate-950/70 p-5 rounded-2xl border border-white/10 relative z-10 hover:border-emerald-500/30 transition-all flex flex-col items-center text-center">
+                          <div class="w-10 h-10 rounded-full bg-emerald-500/15 text-emerald-400 flex items-center justify-center font-mono font-black text-sm mb-3">1</div>
+                          <i data-lucide="video" class="w-6 h-6 text-emerald-400 mb-2"></i>
+                          <h5 class="text-sm sm:text-base font-bold text-white uppercase tracking-wider mb-1.5">Reels Post</h5>
+                          <p class="text-xs sm:text-sm text-slate-200 leading-snug font-medium">Receitas ou planilhas de alta utilidade</p>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="bg-slate-950/70 p-5 rounded-2xl border border-white/10 relative z-10 hover:border-cyan-500/30 transition-all flex flex-col items-center text-center">
+                          <div class="w-10 h-10 rounded-full bg-cyan-500/15 text-cyan-400 flex items-center justify-center font-mono font-black text-sm mb-3">2</div>
+                          <i data-lucide="message-circle" class="w-6 h-6 text-cyan-400 mb-2"></i>
+                          <h5 class="text-sm sm:text-base font-bold text-white uppercase tracking-wider mb-1.5">Comentário</h5>
+                          <p class="text-xs sm:text-sm text-slate-200 leading-snug font-medium">Usuário digita a palavra-chave</p>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="bg-slate-950/70 p-5 rounded-2xl border border-white/10 relative z-10 hover:border-amber-500/30 transition-all flex flex-col items-center text-center">
+                          <div class="w-10 h-10 rounded-full bg-amber-500/15 text-amber-400 flex items-center justify-center font-mono font-black text-sm mb-3">3</div>
+                          <i data-lucide="zap" class="w-6 h-6 text-amber-400 mb-2"></i>
+                          <h5 class="text-sm sm:text-base font-bold text-white uppercase tracking-wider mb-1.5">Automação</h5>
+                          <p class="text-xs sm:text-sm text-slate-200 leading-snug font-medium">Robô dispara direct instantâneo</p>
+                        </div>
+
+                        <!-- Step 4 -->
+                        <div class="bg-slate-950/70 p-5 rounded-2xl border border-white/10 relative z-10 hover:border-pink-500/30 transition-all flex flex-col items-center text-center">
+                          <div class="w-10 h-10 rounded-full bg-pink-500/15 text-pink-400 flex items-center justify-center font-mono font-black text-sm mb-3">4</div>
+                          <i data-lucide="user-check" class="w-6 h-6 text-pink-400 mb-2"></i>
+                          <h5 class="text-sm sm:text-base font-bold text-white uppercase tracking-wider mb-1.5">Conversão</h5>
+                          <p class="text-xs sm:text-sm text-slate-200 leading-snug font-medium">Ganho do seguidor pelo benefício</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Warning Box near Mecânica 1 -->
+                    <div class="bg-amber-950/15 border border-amber-500/30 rounded-3xl p-5 md:p-6 flex items-start gap-4">
+                      <div class="w-12 h-12 rounded-full bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0 border border-amber-500/20">
+                        <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+                      </div>
+                      <p class="text-xs md:text-sm text-amber-200/90 font-medium leading-relaxed">
+                        A automação do "Comente e Receba" reduz a necessidade de mídia paga. O pico de comentários orgânicos acelera a entrega para não-seguidores no explorar e Reels, impulsionando a captação orgânica contínua.
+                      </p>
+                    </div>
+                  </div>
+
+                  <!-- Mecanica 2 (Do site para o Instagram Mockup) -->
+                  <div class="lg:col-span-4 bg-slate-900/40 border border-slate-800 rounded-3xl p-6 md:p-8 flex flex-col justify-between hover:border-assaiGold/20 transition-all shadow-xl">
+                    <div>
+                      <div class="flex items-center gap-3 mb-4 pb-2 border-b border-slate-800">
+                        <div class="w-10 h-10 bg-assaiGold/10 text-assaiGold rounded-xl flex items-center justify-center border border-assaiGold/10"><i data-lucide="globe" class="w-5 h-5"></i></div>
+                        <h4 class="text-xl font-bold text-white font-sans">Mecânica 2</h4>
+                      </div>
+                      <h5 class="text-base md:text-lg text-assaiGold font-bold mb-3 font-sans">Do site para o Instagram</h5>
+                      <p class="text-xs md:text-sm text-slate-300 leading-relaxed font-light mb-4">
+                        Inclusão de banners com gatilhos de benefício tangível no Site institucional, Blog de Receitas e canais de Ofertas Digitais do Assaí.
+                      </p>
+                    </div>
+                    
+                    <!-- Beautiful Mockup of Site/App with floating badge -->
+                    <div class="bg-slate-950/80 rounded-2xl border border-white/10 p-4 relative overflow-hidden flex flex-col justify-between h-64">
+                      <!-- Mock Browser Header -->
+                      <div class="flex items-center justify-between pb-2.5 border-b border-white/5 mb-4">
+                        <div class="flex items-center gap-1.5">
+                          <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+                          <span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
+                          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                        </div>
+                        <div class="bg-slate-900/80 text-[10px] px-4 py-1 rounded-lg text-slate-300 font-mono select-none truncate max-w-[150px]">assai.com.br/ofertas</div>
+                        <i data-lucide="share-2" class="w-3.5 h-3.5 text-slate-400"></i>
+                      </div>
+
+                      <!-- Mock Page Content -->
+                      <div class="flex-1 space-y-3">
+                        <div class="h-4 bg-white/10 rounded-lg w-2/3"></div>
+                        <div class="h-3 bg-white/5 rounded-lg w-1/2"></div>
+                        <div class="grid grid-cols-2 gap-2 mt-3">
+                          <div class="h-14 bg-slate-900 border border-slate-800/80 rounded-xl flex items-center justify-center gap-1.5 p-2 text-[10px] sm:text-xs text-slate-300 font-semibold shadow-inner">
+                            <i data-lucide="file-text" class="w-4 h-4 text-assaiOrange shrink-0"></i> Tabela de Preços PDF
+                          </div>
+                          <div class="h-14 bg-slate-900 border border-slate-800/80 rounded-xl flex items-center justify-center gap-1.5 p-2 text-[10px] sm:text-xs text-slate-300 font-semibold shadow-inner">
+                            <i data-lucide="book-open" class="w-4 h-4 text-assaiOrange shrink-0"></i> Encarte de Ofertas
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Visual Floating Instagram Badge -->
+                      <a href="https://www.instagram.com/assaiatacadistaoficial/" target="_blank" rel="noopener noreferrer" class="absolute bottom-4 right-4 max-w-[220px] bg-gradient-to-r from-pink-500 via-red-500 to-purple-600 text-white font-black px-4.5 py-2.5 rounded-2xl text-xs sm:text-sm shadow-[0_10px_25px_rgba(219,39,119,0.4)] flex items-center gap-2 border border-white/20 hover:scale-105 transition-all animate-pulse cursor-pointer">
+                        <i data-lucide="instagram" class="w-4.5 h-4.5 shrink-0"></i>
+                        <span class="leading-tight">Seguir para economizar!</span>
+                        <span class="w-2 h-2 bg-green-400 rounded-full shrink-0"></span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+          case "algoritmo":
+            return `
+              <div class="space-y-8 py-4 animate-fade-in" id="${prefix}">
+                <div class="border-l-4 border-cyan-400 pl-4 py-1">
+                  <span class="text-xs sm:text-sm tracking-widest font-mono text-slate-400 uppercase">${slide.category}</span>
+                  <h2 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-assaiYellow">${slide.title}</h2>
+                  <p class="text-base sm:text-lg text-slate-300 font-mono font-medium">${slide.subtitle}</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mt-6">
+                  <!-- Alcance Orgânico Table / Graph -->
+                  <div class="lg:col-span-6 bg-slate-900/40 border border-slate-800 rounded-3xl p-6 md:p-8 flex flex-col justify-between shadow-xl">
+                    <div>
+                      <h4 class="text-sm md:text-base font-bold font-mono uppercase tracking-widest text-slate-300 border-b border-slate-800 pb-3 mb-6">ALCANCE ORGÂNICO POR FORMATO NO INSTAGRAM (Média Geral 2025/2026)</h4>
+                      <p class="text-xs md:text-sm font-mono text-slate-400 uppercase tracking-widest mb-6 block">Percentual de Entrega do Post para Contas que NÃO SEGUEM a sua Página:</p>
+                      
+                      <div class="space-y-6">
+                        <!-- Reels Card -->
+                        <div class="bg-slate-950/40 p-4 rounded-2xl border border-white/5 space-y-3">
+                          <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2.5">
+                              <div class="w-9 h-9 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center border border-cyan-500/20">
+                                <i data-lucide="clapperboard" class="w-4.5 h-4.5"></i>
+                              </div>
+                              <div>
+                                <span class="text-base font-black text-white tracking-wide uppercase font-sans">REELS</span>
+                                <span class="text-[10px] font-mono text-cyan-400/80 block uppercase tracking-wider font-semibold">Vídeo de Curta Duração</span>
+                              </div>
+                            </div>
+                            <span class="font-mono text-2xl font-black text-cyan-400">30.8%</span>
+                          </div>
+                          <div class="w-full bg-slate-950 h-5 rounded-full overflow-hidden p-0.5 border border-cyan-500/20">
+                            <div class="bg-gradient-to-r from-cyan-600 to-cyan-400 h-full rounded-full shadow-[0_0_12px_rgba(34,211,238,0.3)]" style="width: 30.8%"></div>
+                          </div>
+                          <p class="text-xs text-cyan-200/90 leading-relaxed font-medium">
+                            🏆 <span class="text-white font-bold">Vetor de Atração em Massa:</span> 55% das visualizações vêm de não-seguidores devido à entrega algorítmica direta na aba Reels/Explorar.
+                          </p>
+                        </div>
+
+                        <!-- Carrossel Card -->
+                        <div class="bg-slate-950/40 p-4 rounded-2xl border border-white/5 space-y-3">
+                          <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2.5">
+                              <div class="w-9 h-9 rounded-xl bg-assaiGold/10 text-assaiGold flex items-center justify-center border border-assaiGold/20">
+                                <i data-lucide="images" class="w-4.5 h-4.5"></i>
+                              </div>
+                              <div>
+                                <span class="text-base font-black text-white tracking-wide uppercase font-sans">CARROSSEL</span>
+                                <span class="text-[10px] font-mono text-assaiGold/80 block uppercase tracking-wider font-semibold">Post de Múltiplas Imagens</span>
+                              </div>
+                            </div>
+                            <span class="font-mono text-2xl font-black text-assaiGold">15.0%</span>
+                          </div>
+                          <div class="w-full bg-slate-950 h-5 rounded-full overflow-hidden p-0.5 border border-assaiGold/20">
+                            <div class="bg-gradient-to-r from-amber-600 to-assaiGold h-full rounded-full shadow-[0_0_12px_rgba(245,158,11,0.3)]" style="width: 15.0%"></div>
+                          </div>
+                          <p class="text-xs text-amber-200/90 leading-relaxed font-medium">
+                            💾 <span class="text-white font-bold">Foco em Retenção:</span> Ótima entrega para seguidores antigos, incentivando salvamento de receitas e tabelas informativas.
+                          </p>
+                        </div>
+
+                        <!-- Foto Card -->
+                        <div class="bg-slate-950/40 p-4 rounded-2xl border border-white/5 space-y-3">
+                          <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2.5">
+                              <div class="w-9 h-9 rounded-xl bg-red-500/10 text-red-400 flex items-center justify-center border border-red-500/20">
+                                <i data-lucide="camera" class="w-4.5 h-4.5"></i>
+                              </div>
+                              <div>
+                                <span class="text-base font-black text-white tracking-wide uppercase font-sans">IMAGEM / FOTO ÚNICA</span>
+                                <span class="text-[10px] font-mono text-red-400/80 block uppercase tracking-wider font-semibold">Post Estático Tradicional</span>
+                              </div>
+                            </div>
+                            <span class="font-mono text-2xl font-black text-red-400">12.0%</span>
+                          </div>
+                          <div class="w-full bg-slate-950 h-5 rounded-full overflow-hidden p-0.5 border border-red-500/20">
+                            <div class="bg-gradient-to-r from-red-600 to-rose-400 h-full rounded-full" style="width: 12.0%"></div>
+                          </div>
+                          <p class="text-xs text-red-200/90 leading-relaxed font-medium">
+                            ⚠️ <span class="text-white font-bold">Baixa Atratividade Orgânica:</span> Queda de 17% YoY na entrega orgânica pela Meta, exigindo migração urgente para vídeos de utilidade.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Distribution Weight Table -->
+                  <div class="lg:col-span-6 bg-slate-900/40 border border-slate-800 rounded-3xl p-6 md:p-8 flex flex-col justify-between shadow-xl">
+                    <div>
+                      <h4 class="text-sm md:text-base font-bold font-mono uppercase tracking-widest text-slate-300 border-b border-slate-800 pb-3 mb-6">MÉTRICAS DE DISTRIBUIÇÃO ALGORÍTMICA (O Peso de cada Interação na Meta)</h4>
+                      
+                      <!-- Table format as requested -->
+                      <div class="overflow-hidden rounded-2xl border border-slate-800 bg-slate-950/40">
+                        <table class="w-full text-left border-collapse text-sm md:text-base">
+                          <thead>
+                            <tr class="bg-slate-900 border-b border-slate-800 text-xs font-mono text-assaiYellow uppercase tracking-wider">
+                              <th class="py-3 px-4 font-bold">Métrica / Peso</th>
+                              <th class="py-3 px-4 font-bold">Interação</th>
+                              <th class="py-3 px-4 font-bold">Impacto Algorítmico</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr class="border-b border-white/5">
+                              <td class="py-3.5 px-4"><span class="text-xs bg-red-500/15 border border-red-500/30 text-red-400 px-2.5 py-1 rounded-full font-bold uppercase font-mono whitespace-nowrap">PESO MÁXIMO</span></td>
+                              <td class="py-3.5 px-4 font-semibold text-white">📩 ENVIOS / COMPARTILHAMENTOS</td>
+                              <td class="py-3.5 px-4 text-xs md:text-sm text-slate-200">Leva o conteúdo para fora do App (WhatsApp)</td>
+                            </tr>
+                            <tr class="border-b border-white/5">
+                              <td class="py-3.5 px-4"><span class="text-xs bg-amber-500/15 border border-amber-500/30 text-amber-400 px-2.5 py-1 rounded-full font-bold uppercase font-mono whitespace-nowrap">PESO ALTO</span></td>
+                              <td class="py-3.5 px-4 font-semibold text-white">💾 SALVAMENTOS</td>
+                              <td class="py-3.5 px-4 text-xs md:text-sm text-slate-200">Sinaliza alto valor utilitário</td>
+                            </tr>
+                            <tr class="border-b border-white/5">
+                              <td class="py-3.5 px-4"><span class="text-xs bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 px-2.5 py-1 rounded-full font-bold uppercase font-mono whitespace-nowrap">PESO MÉDIO</span></td>
+                              <td class="py-3.5 px-4 font-semibold text-white">💬 COMENTÁRIOS</td>
+                              <td class="py-3.5 px-4 text-xs md:text-sm text-slate-200">Ativa nossa Automação de Direct</td>
+                            </tr>
+                            <tr>
+                              <td class="py-3.5 px-4"><span class="text-xs bg-blue-500/15 border border-blue-500/30 text-blue-400 px-2.5 py-1 rounded-full font-bold uppercase font-mono whitespace-nowrap">PESO BAIXO</span></td>
+                              <td class="py-3.5 px-4 font-semibold text-white">❤️ CURTIDAS</td>
+                              <td class="py-3.5 px-4 text-xs md:text-sm text-slate-200">Métrica de vaidade, pouca distribuição</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    
+                    <div class="mt-6 pt-4 border-t border-slate-800/40">
+                      <span class="text-[10px] font-mono text-slate-400 block uppercase mb-1">Fontes dos Dados</span>
+                      <p class="text-xs text-slate-400 leading-relaxed font-sans">
+                        • Meta Business Insights (Social Commerce Benchmark Report 2025/2026) <br>
+                        • Socialinsider International (Instagram Algorithm & Engagement Performance Study) <br>
+                        • Dash Social Analytics (Retail & Social Commerce Trend Report)
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+          case "dia-imbativel":
+            return `
+              <div class="space-y-8 py-4 animate-fade-in" id="${prefix}">
+                <div class="border-l-4 border-assaiOrange pl-4 py-1">
+                  <span class="text-xs sm:text-sm tracking-widest font-mono text-slate-400 uppercase">${slide.category}</span>
+                  <h2 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-assaiYellow">${slide.title}</h2>
+                  <p class="text-base sm:text-lg text-slate-300 font-mono font-medium">${slide.subtitle}</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                  <!-- Conceito and Mensagem -->
+                  <div class="lg:col-span-6 space-y-6 flex flex-col justify-between">
+                    <div class="bg-slate-900/40 border border-slate-800 rounded-3xl p-6 md:p-8 hover:border-assaiOrange/20 transition-all flex-grow">
+                      <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 rounded-2xl bg-assaiOrange/10 text-assaiOrange flex items-center justify-center shadow-lg"><i data-lucide="zap" class="w-6 h-6"></i></div>
+                        <h3 class="font-display font-bold text-xl md:text-2xl text-white font-sans">Conceito Comercial</h3>
+                      </div>
+                      <p class="text-base md:text-lg lg:text-xl text-slate-200 leading-relaxed font-light">
+                        Usar o gatilho da urgência e do <span class="text-assaiYellow font-bold">FOMO</span> (Fear Of Missing Out - Medo de Ficar de Fora) para atrair.
+                      </p>
+                    </div>
+
+                    <div class="bg-slate-900/40 border border-slate-800 rounded-3xl p-6 md:p-8 hover:border-assaiGold/20 transition-all flex-grow">
+                      <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 rounded-2xl bg-assaiGold/10 text-assaiGold flex items-center justify-center shadow-lg"><i data-lucide="megaphone" class="w-6 h-6"></i></div>
+                        <h3 class="font-display font-bold text-xl md:text-2xl text-white font-sans">Mensagem Comercial Direta</h3>
+                      </div>
+                      <p class="text-base md:text-lg lg:text-xl text-slate-200 leading-relaxed font-light">
+                        Criar peças de aquisição (Estático, Reels e Stories) focadas no <span class="text-assaiGold font-bold">alerta de oportunidade</span>, incentivando o follow imediato.
+                      </p>
+                    </div>
+                  </div>
+
+                  <!-- Copys without price -->
+                  <div class="lg:col-span-6 bg-slate-900/40 border border-slate-800 rounded-3xl p-6 md:p-8 flex flex-col justify-between shadow-xl">
+                    <div>
+                      <h4 class="text-sm md:text-base font-bold font-mono uppercase tracking-widest text-slate-300 border-b border-slate-800 pb-3 mb-6">Exemplos de Copys / Legendas sem Preço</h4>
+                      
+                      <div class="space-y-6">
+                        <div class="bg-slate-950/60 p-5 rounded-2xl border border-slate-800">
+                          <span class="text-xs font-mono uppercase font-bold text-assaiOrange block mb-2">Exemplo 1</span>
+                          <p class="text-base md:text-lg italic text-slate-100 font-mono leading-relaxed">
+                            "O Dia Imbatível do Assaí começou. Se você ainda não segue nosso perfil, está perdendo os avisos dos estoques mais disputados do mês. Ative as notificações no botão seguir."
+                          </p>
+                        </div>
+
+                        <div class="bg-slate-950/60 p-5 rounded-2xl border border-slate-800">
+                          <span class="text-xs font-mono uppercase font-bold text-assaiGold block mb-2">Exemplo 2</span>
+                          <p class="text-base md:text-lg italic text-slate-100 font-mono leading-relaxed">
+                            "Quem segue o Assaí fica sabendo primeiro quando o Dia Imbatível entra no ar. Garanta o abastecimento do seu comércio antes de todo mundo."
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+          case "plano-escala":
+            return `
+              <div class="space-y-8 py-4 animate-fade-in" id="${prefix}">
+                <div class="border-l-4 border-assaiGold pl-4 py-1">
+                  <span class="text-xs sm:text-sm tracking-widest font-mono text-slate-400 uppercase">${slide.category}</span>
+                  <h2 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-assaiYellow">${slide.title}</h2>
+                  <p class="text-base sm:text-lg text-slate-300 font-mono font-medium">${slide.subtitle}</p>
+                </div>
+
+                <!-- Guidance Box advising user how to interact -->
+                <div class="bg-gradient-to-r from-assaiBlue/40 via-assaiBlue/60 to-slate-900 border border-white/10 rounded-2xl p-4 flex items-center gap-3.5 text-xs sm:text-sm text-slate-200 font-mono shadow-md animate-pulse">
+                  <div class="w-8 h-8 rounded-full bg-assaiOrange/25 text-assaiOrange flex items-center justify-center shrink-0">
+                    <i data-lucide="hand" class="w-4.5 h-4.5"></i>
+                  </div>
+                  <div>
+                    <span class="font-bold text-white block">📅 CRONOGRAMA INTERATIVO:</span>
+                    <span>Clique em cada fase abaixo para carregar as ações e táticas detalhadas no painel.</span>
+                  </div>
+                </div>
+
+                <!-- Interactive Timeline Tabs Scheduler layout -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mt-4">
+                  <!-- Stepper Buttons (Left Side) -->
+                  <div class="lg:col-span-4 flex flex-col gap-4">
+                    <span class="text-xs font-mono uppercase tracking-widest text-slate-400 block mb-1">Selecione uma Fase:</span>
+                    
+                    <!-- Phase 1 Button -->
+                    <button id="btn-phase-1" onclick="switchPhase(1, this)" class="timeline-phase-btn text-left p-4.5 rounded-2xl border-2 border-transparent bg-assaiOrange text-white shadow-xl transition-all duration-300 flex items-center gap-3.5 hover:translate-x-1 cursor-pointer">
+                      <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center font-black text-sm shrink-0">1</div>
+                      <div>
+                        <span class="text-[10px] font-mono block opacity-80 uppercase font-bold">Dias 1 a 15</span>
+                        <h4 class="font-bold text-sm sm:text-base font-sans leading-tight">1. Ajuste Editorial</h4>
+                      </div>
+                    </button>
+
+                    <!-- Phase 2 Button -->
+                    <button id="btn-phase-2" onclick="switchPhase(2, this)" class="timeline-phase-btn text-left p-4.5 rounded-2xl border-2 border-slate-800 text-slate-400 bg-slate-900/30 hover:bg-slate-800/40 hover:text-slate-200 transition-all duration-300 flex items-center gap-3.5 hover:translate-x-1 cursor-pointer">
+                      <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center font-bold text-sm shrink-0">2</div>
+                      <div>
+                        <span class="text-[10px] font-mono block opacity-80 uppercase font-bold">Dias 16 a 45</span>
+                        <h4 class="font-bold text-sm sm:text-base font-sans leading-tight">2. Ativação de Gatilhos</h4>
+                      </div>
+                    </button>
+
+                    <!-- Phase 3 Button -->
+                    <button id="btn-phase-3" onclick="switchPhase(3, this)" class="timeline-phase-btn text-left p-4.5 rounded-2xl border-2 border-slate-800 text-slate-400 bg-slate-900/30 hover:bg-slate-800/40 hover:text-slate-200 transition-all duration-300 flex items-center gap-3.5 hover:translate-x-1 cursor-pointer">
+                      <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center font-bold text-sm shrink-0">3</div>
+                      <div>
+                        <span class="text-[10px] font-mono block opacity-80 uppercase font-bold">Fase Contínua</span>
+                        <h4 class="font-bold text-sm sm:text-base font-sans leading-tight">3. Monitoramento & Escala</h4>
+                      </div>
+                    </button>
+                  </div>
+
+                  <!-- Details Content Card (Right Side) -->
+                  <div class="lg:col-span-8 bg-slate-900/40 border border-slate-800 rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden flex flex-col justify-between minimum-h-[320px]">
+                    <!-- Glowing ambient overlay background -->
+                    <div class="absolute inset-0 bg-gradient-to-tr from-slate-900/10 via-transparent to-assaiOrange/5 pointer-events-none"></div>
+
+                    <!-- Phase 1 content (Visible by default) -->
+                    <div id="phase-1" class="timeline-phase-content space-y-6">
+                      <div class="flex items-center gap-3 pb-4 border-b border-slate-800">
+                        <i data-lucide="edit-3" class="w-6 h-6 text-assaiOrange"></i>
+                        <h3 class="text-xl md:text-2xl font-bold text-white font-sans">Fase 1: Ajuste de Linha Editorial</h3>
+                      </div>
+                      <div class="space-y-4">
+                        <div class="flex gap-3">
+                          <i data-lucide="check-square" class="w-5.5 h-5.5 text-assaiOrange shrink-0 mt-0.5"></i>
+                          <p class="text-base md:text-lg text-slate-200">
+                            Criação dos templates dinâmicos e definição dos criadores / embaixadores de nicho.
+                          </p>
+                        </div>
+                        <div class="flex gap-3">
+                          <i data-lucide="check-square" class="w-5.5 h-5.5 text-assaiOrange shrink-0 mt-0.5"></i>
+                          <p class="text-base md:text-lg text-slate-200">
+                            Homologação dos novos CTAs de fechamento e implementação dos banners de incentivo ao follow no site/blog do Assaí.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Phase 2 content (Hidden by default) -->
+                    <div id="phase-2" class="timeline-phase-content space-y-6 hidden">
+                      <div class="flex items-center gap-3 pb-4 border-b border-slate-800">
+                        <i data-lucide="zap" class="w-6 h-6 text-assaiGold"></i>
+                        <h3 class="text-xl md:text-2xl font-bold text-white font-sans">Fase 2: Ativação dos Gatilhos de Compartilhamento</h3>
+                      </div>
+                      <div class="space-y-4">
+                        <div class="flex gap-3">
+                          <i data-lucide="check-square" class="w-5.5 h-5.5 text-assaiGold shrink-0 mt-0.5"></i>
+                          <p class="text-base md:text-lg text-slate-200">
+                            Implementação da automação de Direct e início das séries "Hacks de Economia".
+                          </p>
+                        </div>
+                        <div class="flex gap-3">
+                          <i data-lucide="check-square" class="w-5.5 h-5.5 text-assaiGold shrink-0 mt-0.5"></i>
+                          <p class="text-base md:text-lg text-slate-200">
+                            Lançamento das campanhas de aquisição integradas ao ecossistema do Dia Imbatível.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Phase 3 content (Hidden by default) -->
+                    <div id="phase-3" class="timeline-phase-content space-y-6 hidden">
+                      <div class="flex items-center gap-3 pb-4 border-b border-slate-800">
+                        <i data-lucide="trending-up" class="w-6 h-6 text-emerald-400"></i>
+                        <h3 class="text-xl md:text-2xl font-bold text-white font-sans">Fase 3: Monitoramento Contínuo & Escala</h3>
+                      </div>
+                      <div class="space-y-4">
+                        <div class="flex gap-3">
+                          <i data-lucide="check-square" class="w-5.5 h-5.5 text-emerald-400 shrink-0 mt-0.5"></i>
+                          <p class="text-base md:text-lg text-slate-200">
+                            Análise semanal da taxa de conversão (Visualizações de Reels vs. Novos Seguidores).
+                          </p>
+                        </div>
+                        <div class="flex gap-3">
+                          <i data-lucide="check-square" class="w-5.5 h-5.5 text-emerald-400 shrink-0 mt-0.5"></i>
+                          <p class="text-base md:text-lg text-slate-200">
+                            Otimização orgânica com base em relatórios automáticos de salvamento.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Bottom Indicator -->
+                    <div class="mt-8 pt-4 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400 font-mono">
+                      <span>Metodologia Integrada</span>
+                      <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Em Execução</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+          case "metricas":
+            return `
+              <div class="space-y-8 py-4 animate-fade-in" id="${prefix}">
+                <div class="border-l-4 border-assaiOrange pl-4 py-1">
+                  <span class="text-xs sm:text-sm tracking-widest font-mono text-slate-400 uppercase">${slide.category}</span>
+                  <h2 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-assaiYellow">${slide.title}</h2>
+                  <p class="text-base sm:text-lg text-slate-300 font-mono font-medium">${slide.subtitle}</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+                  <!-- KPI Primario -->
+                  <div class="bg-gradient-to-b from-slate-900/60 to-slate-950/80 border border-white/5 rounded-3xl p-6 md:p-8 flex flex-col justify-between shadow-2xl hover:border-assaiOrange/30 transition-all">
+                    <div>
+                      <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-800">
+                        <div class="w-12 h-12 bg-assaiOrange/10 text-assaiOrange rounded-2xl flex items-center justify-center shadow-lg"><i data-lucide="target" class="w-6 h-6"></i></div>
+                        <h3 class="font-display font-bold text-xl text-white font-sans">KPI Primário</h3>
+                      </div>
+                      <p class="text-lg md:text-xl text-slate-100 font-medium leading-relaxed">
+                        Crescimento percentual da base líquida de seguidores mês a mês.
+                      </p>
+                    </div>
+                    <div class="mt-8 pt-4 border-t border-slate-800/40 text-[11px] font-mono text-slate-400">Métrica Principal de Escala</div>
+                  </div>
+
+                  <!-- KPI Secundario -->
+                  <div class="bg-gradient-to-b from-slate-900/60 to-slate-950/80 border border-white/5 rounded-3xl p-6 md:p-8 flex flex-col justify-between shadow-2xl hover:border-assaiGold/30 transition-all">
+                    <div>
+                      <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-800">
+                        <div class="w-12 h-12 bg-assaiGold/10 text-assaiGold rounded-2xl flex items-center justify-center shadow-lg"><i data-lucide="share-2" class="w-6 h-6"></i></div>
+                        <h3 class="font-display font-bold text-xl text-white font-sans">KPI Secundário</h3>
+                      </div>
+                      <p class="text-lg md:text-xl text-slate-100 font-medium leading-relaxed">
+                        Taxa de salvamento e compartilhamento de Reels (principais vetores de atração orgânica).
+                      </p>
+                    </div>
+                    <div class="mt-8 pt-4 border-t border-slate-800/40 text-[11px] font-mono text-slate-400">Métrica de Engajamento & Algoritmo</div>
+                  </div>
+
+                  <!-- ROI Indireto -->
+                  <div class="bg-gradient-to-b from-slate-900/60 to-slate-950/80 border border-white/5 rounded-3xl p-6 md:p-8 flex flex-col justify-between shadow-2xl hover:border-emerald-400/30 transition-all">
+                    <div>
+                      <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-800">
+                        <div class="w-12 h-12 bg-emerald-500/10 text-emerald-400 rounded-2xl flex items-center justify-center shadow-lg"><i data-lucide="trending-up" class="w-6 h-6"></i></div>
+                        <h3 class="font-display font-bold text-xl text-white font-sans">ROI Indireto</h3>
+                      </div>
+                      <p class="text-lg md:text-xl text-slate-100 font-medium leading-relaxed">
+                        Aumento do tráfego qualificado nas lojas físicas a partir do estímulo digital.
+                      </p>
+                    </div>
+                    <div class="mt-8 pt-4 border-t border-slate-800/40 text-[11px] font-mono text-slate-400">Mapeamento de Conversão Real</div>
+                  </div>
+                </div>
+              </div>
+            `;
+          case "resumo":
+            return `
+              <div class="space-y-8 py-4 animate-fade-in" id="${prefix}">
+                <div class="border-l-4 border-assaiYellow pl-4 py-1">
+                  <span class="text-xs sm:text-sm tracking-widest font-mono text-slate-400 uppercase">${slide.category}</span>
+                  <h2 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-assaiYellow">${slide.title}</h2>
+                  <p class="text-base sm:text-lg text-slate-300 font-mono font-medium">${slide.subtitle}</p>
+                </div>
+
+                <!-- Strategy Results Table with larger typography and the added FOMO row -->
+                <div class="overflow-hidden rounded-2xl border border-slate-800 bg-slate-950/40 mt-6 shadow-xl">
+                  <table class="w-full text-left border-collapse text-base md:text-lg">
+                    <thead>
+                      <tr class="bg-slate-900 border-b border-slate-800 text-sm md:text-base font-mono text-assaiYellow uppercase tracking-wider">
+                        <th class="py-4 px-6 font-bold w-1/2">Nova Estratégia</th>
+                        <th class="py-4 px-6 font-bold w-1/2 border-l border-slate-800">Resultado Prático na Atração</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="border-b border-white/5 hover:bg-slate-900/30">
+                        <td class="py-5 px-6 leading-relaxed">
+                          <strong class="text-white text-base md:text-lg block mb-1">Hacks de Utilidade (Reels Dinâmicos)</strong>
+                          <span class="text-slate-300 font-light">Vídeos rápidos com soluções diárias de ultraeconomia doméstica (B2C) e dicas de margem de lucro para transformadores (B2B), por exemplo.</span>
+                        </td>
+                        <td class="py-5 px-6 border-l border-white/5 leading-relaxed">
+                          <strong class="text-emerald-400 text-base md:text-lg block mb-1">Explosão de Alcance Orgânico</strong>
+                          <span class="text-slate-300 font-light">Conteúdos úteis disparam os salvamentos e compartilhamentos, forçando o algoritmo a entregar o Assaí para milhões de não-seguidores.</span>
+                        </td>
+                      </tr>
+                      <tr class="border-b border-white/5 hover:bg-slate-900/30">
+                        <td class="py-5 px-6 leading-relaxed">
+                          <strong class="text-white text-base md:text-lg block mb-1">Gatilho de Valor (Comente e Receba)</strong>
+                          <span class="text-slate-300 font-light">Automação de Direct. O usuário comenta uma palavra-chave específica e recebe na hora uma planilha de custos, receita ou cupom.</span>
+                        </td>
+                        <td class="py-5 px-6 border-l border-white/5 leading-relaxed">
+                          <strong class="text-emerald-400 text-base md:text-lg block mb-1">Efeito Cascata no Algoritmo</strong>
+                          <span class="text-slate-300 font-light">O pico de comentários em minutos sinaliza relevância extrema para a Meta, multiplicando a distribuição do post sem custo de mídia.</span>
+                        </td>
+                      </tr>
+                      <tr class="border-b border-white/5 hover:bg-slate-900/30">
+                        <td class="py-5 px-6 leading-relaxed">
+                          <strong class="text-white text-base md:text-lg block mb-1">Segmentação por Motores (B2C e B2B)</strong>
+                          <span class="text-slate-300 font-light">Divisão clara e cirúrgica da linha editorial para falar diretamente com as dores do PF e do PJ.</span>
+                        </td>
+                        <td class="py-5 px-6 border-l border-white/5 leading-relaxed">
+                          <strong class="text-emerald-400 text-base md:text-lg block mb-1">Atração Qualificada e Retenção</strong>
+                          <span class="text-slate-300 font-light">Comunidades de nicho passam a seguir a página e a indicar o perfil organicamente em grupos de WhatsApp e redes de contatos.</span>
+                        </td>
+                      </tr>
+                      <!-- Newly requested FOMO row inside the table -->
+                      <tr class="hover:bg-slate-900/30">
+                        <td class="py-5 px-6 leading-relaxed">
+                          <strong class="text-white text-base md:text-lg block mb-1">Ação: Urgência Comercial no Dia Imbatível (FOMO)</strong>
+                          <span class="text-slate-300 font-light">Peças focadas em alerta de estoque e velocidade de abastecimento sem exposição de preço.</span>
+                        </td>
+                        <td class="py-5 px-6 border-l border-white/5 leading-relaxed">
+                          <strong class="text-emerald-400 text-base md:text-lg block mb-1">Ativação psicológica de urgência</strong>
+                          <span class="text-slate-300 font-light">Convertendo clientes de loja física e compradores sazonais em seguidores recorrentes para não perderem as datas comerciais.</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            `;
+          case "obrigado":
+            return `
+              <div class="flex flex-col items-center justify-center text-center py-12 px-6 md:py-20 h-full relative overflow-hidden" id="${prefix}">
+                <!-- Ambient glow backgrounds -->
+                <div class="absolute w-72 h-72 rounded-full bg-assaiOrange/10 blur-3xl -top-20 -left-20 pointer-events-none select-none z-0"></div>
+                <div class="absolute w-72 h-72 rounded-full bg-assaiGold/10 blur-3xl -bottom-20 -right-20 pointer-events-none select-none z-0"></div>
+
+                <div class="mb-10 flex justify-center transform hover:scale-105 transition-all duration-300 z-10">
+                  <img src="https://i.imgur.com/wCZYLnN.png" alt="Assaí" class="h-20 sm:h-24 w-auto object-contain max-w-full block" referrerPolicy="no-referrer">
+                </div>
+                
+                <h1 class="text-5xl sm:text-7xl md:text-8xl font-display font-black tracking-tight text-assaiYellow mt-2 mb-4 drop-shadow-2xl leading-none uppercase z-10">
+                  Obrigado!
+                </h1>
+                
+                <div class="h-1 w-24 bg-gradient-to-r from-assaiOrange via-assaiGold to-assaiOrange rounded-full mx-auto my-6 z-10 animate-pulse"></div>
+                
+                <h2 class="text-xl md:text-2xl lg:text-3xl font-display font-bold text-white tracking-wide uppercase max-w-2xl mt-2 leading-snug z-10">
+                  Atração de Novos Seguidores
+                </h2>
+                
+                <p class="text-sm md:text-base text-slate-300 font-mono mt-3 uppercase tracking-widest z-10">
+                  Estratégia de Conteúdo Orgânico • @assaiatacadistaoficial
+                </p>
+
+                <div class="mt-12 bg-slate-900/60 border border-slate-800/80 px-6 py-3.5 rounded-2xl text-xs sm:text-sm text-slate-300 inline-flex items-center gap-3 shadow-xl backdrop-blur-sm z-10">
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span class="font-medium tracking-wide">Apresentação Pronta para Implementação</span>
+                </div>
+              </div>
+            `;
+          default:
+            return `<div class="p-4 text-center text-slate-400">Layout indisponível.</div>`;
+        }
+      }
+
+      /* LEGACY RENDER SLIDE START
+      function renderSlide_Legacy(slide, contextClass = "presentation") {
+        const id = slide.id;
+        const prefix = contextClass === "report" ? `report-${id}` : `slides-${id}`;
+
+        switch (id) {
+          case "capa":
+            return `
+              <div class="flex flex-col items-center justify-center text-center py-10 px-4 md:py-16 h-full relative overflow-hidden" id="${prefix}">
+                <div class="inline-flex items-center gap-2 bg-assaiOrange/15 border border-assaiOrange/30 px-5 py-2 rounded-full mb-8 text-sm font-semibold text-[#ffffff] tracking-wider uppercase">
+                  <span class="w-2 h-2 rounded-full bg-assaiOrange animate-pulse"></span>
+                  Planejamento Estratégico 360º
+                </div>
+                <div class="scale-125 mb-8 flex justify-center">
+                  <img src="https://i.imgur.com/wCZYLnN.png" alt="Assaí" class="h-14 w-auto object-contain">
+                </div>
+                <h1 class="text-4xl md:text-5xl lg:text-7xl font-display font-black tracking-tight text-assaiYellow mt-4 mb-3 drop-shadow-md">
+                  ${slide.title}
+                </h1>
+                <h2 class="text-2xl md:text-3xl lg:text-4xl font-display font-bold text-white tracking-wide uppercase max-w-3xl px-8 py-3.5 border-y-2 border-assaiOrange/35 mt-3">
+                  ${slide.subtitle}
+                </h2>
+                <p class="text-base md:text-lg lg:text-xl text-slate-200 max-w-3xl mx-auto mt-8 leading-relaxed font-normal">
+                  ${slide.description}
+                </p>
+                <div class="flex items-center justify-center gap-6 mt-12 text-xs sm:text-sm font-mono text-slate-300 border border-slate-700/60 bg-slate-900/50 px-8 py-4 rounded-xl backdrop-blur-sm">
+                  <div class="flex items-center gap-1.5 border-r border-slate-800 pr-5">
+                    <i data-lucide="calendar" class="w-4.5 h-4.5 text-assaiOrange"></i>
+                    <span>DATA-CHAVE: 25 de Junho</span>
+                  </div>
+                  <div class="flex items-center gap-1.5">
+                    <i data-lucide="clock" class="w-4.5 h-4.5 text-assaiGold"></i>
+                    <span>Ações: 24 & 25 de Junho</span>
+                  </div>
+                </div>
+              </div>
+            `;
+          case "ecossistema":
+            return `
+              <div class="space-y-6" id="${prefix}">
+                <div class="border-l-4 border-assaiOrange pl-4 py-1">
+                  <span class="text-xs tracking-widest font-mono text-slate-400 uppercase">${slide.category}</span>
+                  <h2 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-assaiYellow">${slide.title}</h2>
+                </div>
+                <p class="text-sm md:text-base lg:text-lg text-slate-200 leading-relaxed max-w-5xl font-light">${slide.description}</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                  ${slide.pillars.map((pillar, idx) => {
+                    const isDigital = pillar.accent === "digital";
+                    return `
+                      <div class="rounded-2xl p-6 border bg-slate-900/50 border-white/5 relative overflow-hidden flex flex-col justify-between hover:border-slate-800 transition-all">
+                        <div>
+                          <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 rounded-xl flex items-center justify-center ${isDigital ? "bg-cyan-500/10 text-cyan-400" : "bg-assaiOrange/10 text-assaiOrange"}">
+                              <i data-lucide="${isDigital ? "smartphone" : "compass"}" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="font-display font-bold text-base md:text-lg lg:text-xl text-white">${pillar.title}</h3>
+                          </div>
+                          <div class="space-y-4">
+                            <div>
+                              <span class="text-[10px] sm:text-xs uppercase font-mono tracking-wider text-slate-400 block mb-0.5">Foco Estratégico</span>
+                              <p class="text-sm font-semibold text-slate-100">${pillar.foco}</p>
+                            </div>
+                            <div>
+                              <span class="text-[10px] sm:text-xs uppercase font-mono tracking-wider text-slate-400 block mb-1.5">Canais</span>
+                              <div class="flex flex-wrap gap-1.5">
+                                ${pillar.canais.map(canal => `<span class="text-xs px-3.5 py-1.5 rounded-full font-medium ${isDigital ? "bg-cyan-500/10 text-cyan-300 border border-cyan-500/15" : "bg-assaiOrange/10 text-assaiOrange border border-assaiOrange/15"}">${canal}</span>`).join('')}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-slate-800/40">
+                          <span class="text-[10px] sm:text-xs uppercase font-mono tracking-wider text-slate-400 block mb-1">Papel na Jornada</span>
+                          <p class="text-xs md:text-sm text-slate-200 leading-relaxed italic">${pillar.papel}</p>
+                        </div>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+            `;
+          case "facebook":
+            return `
+              <div class="space-y-6" id="${prefix}">
+                <div class="border-l-4 border-assaiGold pl-4 py-1">
+                  <span class="text-xs tracking-widest font-mono text-slate-400 uppercase">${slide.category}</span>
+                  <h2 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-assaiYellow">${slide.title}</h2>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+                  <div class="lg:col-span-6 space-y-5 flex flex-col justify-between">
+                    <div class="bg-assaiLightBlue/20 border border-slate-800/60 rounded-2xl p-4">
+                      <div class="flex items-start gap-3">
+                        <div class="p-2 bg-blue-900/45 rounded-xl text-blue-400 flex-shrink-0 mt-0.5">
+                          <i data-lucide="facebook" class="w-5 h-5 fill-blue-400 stroke-none"></i>
+                        </div>
+                        <div>
+                          <h3 class="font-display font-semibold text-white text-xs md:text-sm">Direcionamento Estratégico</h3>
+                          <p class="text-xs sm:text-sm text-slate-200 leading-relaxed mt-1">${slide.direcionamentoEstrategico}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="bg-slate-900/40 border border-slate-800 rounded-2xl p-4 space-y-4 flex-grow flex flex-col justify-center">
+                      <h4 class="text-[11px] sm:text-xs font-bold uppercase text-assaiGold tracking-widest flex items-center gap-1.5 font-mono">
+                        <i data-lucide="check-circle-2" class="w-4.5 h-4.5 text-assaiGold"></i> Editorial - Copywriting
+                      </h4>
+                      <div class="space-y-3">
+                        <div class="bg-[#003674]/30 rounded-xl p-3 md:p-4 border border-blue-900/40">
+                          <span class="text-[9px] sm:text-[10px] font-mono text-slate-200 px-2 py-0.5 bg-blue-900/50 rounded-full font-bold">Fase ${slide.linhaEditorial.faseAmanha.fase} (${slide.linhaEditorial.faseAmanha.data})</span>
+                          <p class="text-xs md:text-sm italic text-slate-100 font-mono mt-1.5 leading-relaxed bg-slate-950/40 p-3.5 rounded-lg border border-slate-900">${slide.linhaEditorial.faseAmanha.headline}</p>
+                        </div>
+                        <div class="bg-assaiOrange/10 rounded-xl p-3 md:p-4 border border-assaiOrange/15">
+                          <span class="text-[9px] sm:text-[10px] font-mono text-slate-100 px-2 py-0.5 bg-assaiOrange/30 rounded-full font-bold">Fase ${slide.linhaEditorial.faseHoje.fase} (${slide.linhaEditorial.faseHoje.data})</span>
+                          <p class="text-xs md:text-sm italic text-slate-100 font-mono mt-1.5 leading-relaxed bg-slate-950/40 p-3.5 rounded-lg border border-slate-900">${slide.linhaEditorial.faseHoje.headline}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="bg-gradient-to-br from-[#003674] to-[#002f66] border border-slate-800 rounded-2xl p-4 space-y-3">
+                      <h4 class="text-[11px] sm:text-xs font-bold uppercase text-white tracking-widest flex items-center gap-1 font-mono">Direcionamento Visual</h4>
+                      <div class="flex flex-wrap gap-1.5">
+                        ${slide.direcionamentoVisual.map(item => `<span class="text-xs bg-slate-950/65 text-slate-200 px-3.5 py-1.5 rounded-lg border border-slate-800 flex items-center gap-1 font-medium"><span class="w-1.5 h-1.5 rounded-full bg-assaiOrange"></span>${item}</span>`).join('')}
+                      </div>
+                      <div class="bg-gradient-to-r from-assaiOrange to-assaiYellow rounded-xl p-2 text-[#004696] font-display font-black text-center select-none shadow">
+                        <p class="text-[7px] tracking-widest uppercase font-extrabold">Formato Concorrente Tradicional</p>
+                        <p class="text-sm uppercase tracking-tight font-black leading-none mt-0.5">PREÇO ULTRA HARDSell</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="lg:col-span-6 space-y-5 flex flex-col justify-between">
+                    <div class="bg-slate-900/40 border border-slate-800 rounded-2xl p-4 space-y-3 flex-grow flex flex-col justify-between">
+                      <div class="border-b border-slate-800/50 pb-1 flex items-center justify-between">
+                        <h4 class="text-[11px] sm:text-xs font-bold uppercase text-assaiGold tracking-widest font-mono flex items-center gap-1">
+                          <i data-lucide="facebook" class="w-4 h-4 text-blue-400 fill-blue-400 stroke-none"></i> Referências de Varejo
+                        </h4>
+                      </div>
+                      <div class="grid grid-cols-2 gap-3 flex-grow items-center pt-2">
+                        ${[
+                          "https://i.imgur.com/oKSOLVJ.png",
+                          "https://i.imgur.com/lTS4Jlq.png",
+                          "https://i.imgur.com/r99Pc8X.png",
+                          "https://i.imgur.com/4lYEbsy.png"
+                        ].map((url, i) => `
+                          <div class="bg-slate-950 border border-slate-800 rounded-xl overflow-hidden flex flex-col shadow-xl transition-all hover:scale-[1.02]">
+                            <div class="px-2 py-1 bg-slate-900/80 flex items-center justify-between border-b border-white/5">
+                              <span class="text-[8px] font-sans text-slate-300 font-extrabold flex items-center gap-1">👍 Ref ${i+1}</span>
+                            </div>
+                            <div class="h-[95px] flex items-center justify-center bg-slate-950 p-1">
+                              <img src="${url}" class="max-h-full max-w-full object-contain" referrerPolicy="no-referrer">
+                            </div>
+                          </div>
+                        `).join('')}
+                      </div>
+                    </div>
+                    <div class="bg-assaiGold/10 border border-assaiGold/20 rounded-2xl p-4 space-y-2">
+                      <h4 class="text-[10px] sm:text-xs font-bold uppercase text-assaiGold font-mono tracking-widest">Por que funciona neles?</h4>
+                      <p class="text-xs md:text-sm text-slate-200 leading-relaxed font-normal">${slide.whyWorks.text}</p>
+                      <div class="bg-assaiDarkBlue/40 p-2.5 rounded-xl border border-white/5 flex items-center gap-2 mt-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-assaiOrange shrink-0"></span>
+                        <p class="text-[11px] italic text-slate-300"><strong class="text-white">O Toque Assaí:</strong> ${slide.whyWorks.toqueAssai}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+          case "instagram-tiktok":
+            return `
+              <div class="space-y-6" id="${prefix}">
+                <div class="border-l-4 border-cyan-400 pl-4 py-1">
+                  <span class="text-xs tracking-widest font-mono text-slate-400 uppercase">${slide.category}</span>
+                  <h2 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-assaiYellow">${slide.title}</h2>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+                  <div class="lg:col-span-6 space-y-4 flex flex-col justify-between">
+                    <div class="bg-assaiLightBlue/20 border border-slate-800/60 rounded-2xl p-4">
+                      <div class="flex items-start gap-3">
+                        <div class="p-2 bg-gradient-to-tr from-pink-500/20 to-purple-500/20 rounded-xl text-pink-400 flex-shrink-0">
+                          <i data-lucide="instagram" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                          <h3 class="font-display font-semibold text-white text-xs md:text-sm">Instagram & TikTok</h3>
+                          <p class="text-xs sm:text-sm text-slate-200 leading-relaxed mt-1">${slide.direcionamentoEstrategico}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="space-y-3 flex-grow flex flex-col justify-center">
+                      ${slide.formatos.map(formato => `
+                        <div class="bg-slate-900/40 border border-slate-800 rounded-xl p-4">
+                          <h4 class="font-display font-bold text-sm text-white flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>${formato.title}
+                          </h4>
+                          <p class="text-xs md:text-sm text-slate-200 mt-2 leading-relaxed">${formato.ideia}</p>
+                        </div>
+                      `).join('')}
+                    </div>
+                  </div>
+                  <div class="lg:col-span-6 bg-slate-950/40 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between">
+                    <div>
+                      <div class="flex items-center justify-between pb-2 border-b border-slate-900 mb-3">
+                        <h4 class="text-[11px] sm:text-xs font-bold uppercase text-slate-300 tracking-widest flex items-center gap-1.5 font-mono">
+                          <i data-lucide="video" class="w-4 h-4 text-assaiOrange"></i> Narrativas
+                        </h4>
+                      </div>
+                      <div class="space-y-4">
+                        ${slide.fases.map((fase, fIdx) => `
+                          <div class="bg-assaiLightBlue/10 border border-white/5 p-4 rounded-xl flex gap-4 items-center">
+                            <div class="flex-1 min-w-0">
+                              <span class="text-[8px] sm:text-[9px] uppercase tracking-wider font-mono font-bold px-2 py-0.5 rounded border border-white/5 text-assaiOrange bg-assaiOrange/10">${fase.badge}</span>
+                              <h5 class="font-display font-bold text-xs sm:text-sm text-white mt-1.5">${fase.nome}</h5>
+                              <p class="text-[11px] text-slate-200 mt-1 leading-normal font-normal">${fase.desc}</p>
+                              <div class="flex gap-2 mt-4">
+                                <a href="${fase.videoLink}" target="_blank" class="flex-1 text-center py-1.5 bg-assaiOrange hover:bg-assaiGold text-white text-[10px] font-bold rounded-lg transition-all">Vídeo Ref</a>
+                                <a href="${fase.roteiroLink}" target="_blank" class="flex-1 text-center py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-[10px] font-bold rounded-lg transition-all border border-slate-700">Roteiro Doc</a>
+                              </div>
+                            </div>
+                            <div class="relative w-[80px] h-[140px] bg-slate-950 rounded-xl border border-slate-800 shrink-0 overflow-hidden shadow-lg p-0.5 group">
+                              <img src="${fase.refImage}" class="w-full h-full object-cover transition-transform group-hover:scale-105" referrerPolicy="no-referrer">
+                              <div class="absolute inset-x-0 bottom-0 bg-black/60 py-0.5 text-center text-[6px] tracking-tight text-white font-mono uppercase">Preview</div>
+                            </div>
+                          </div>
+                        `).join('')}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+          case "stories":
+            return `
+              <div class="space-y-6" id="${prefix}">
+                <div class="border-l-4 border-pink-400 pl-4 py-1">
+                  <span class="text-xs tracking-widest font-mono text-slate-400 uppercase">${slide.category}</span>
+                  <h2 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-assaiYellow">${slide.title}</h2>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch" data-slide-id="stories">
+                  <div class="lg:col-span-7 space-y-4 flex flex-col justify-between">
+                    <div class="bg-assaiLightBlue/20 border border-slate-800/60 rounded-2xl p-4">
+                      <div class="flex items-start gap-3">
+                        <div class="p-2 bg-gradient-to-tr from-pink-500/20 to-orange-500/20 rounded-xl text-pink-400 flex-shrink-0">
+                          <i data-lucide="instagram" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                          <h3 class="font-display font-semibold text-white text-xs md:text-sm">Direcionamento de Conversão</h3>
+                          <p class="text-xs sm:text-sm text-slate-200 leading-relaxed mt-1">${slide.direcionamentoEstrategico}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="bg-assaiDarkBlue/30 border border-white/5 rounded-2xl p-4">
+                      <h4 class="text-[10px] sm:text-xs font-bold uppercase text-assaiOrange tracking-widest font-mono font-bold">Regra de Formato</h4>
+                      <p class="text-xs sm:text-sm text-slate-200 mt-1 leading-relaxed">${slide.formato}</p>
+                    </div>
+                    <div class="bg-slate-900/40 border border-slate-800 rounded-2xl p-4">
+                      <span class="text-[9px] sm:text-[10px] uppercase tracking-wider font-mono text-assaiOrange bg-assaiOrange/10 px-2 py-0.5 rounded border border-assaiOrange/20 inline-block font-bold">Referência Visual de Campanha</span>
+                      <div class="w-full h-[290px] rounded-xl border border-slate-800 overflow-hidden bg-slate-950 p-3 flex items-center justify-center relative mt-3 shadow-inner">
+                        <img src="https://i.imgur.com/Q4CIJZs.png" alt="Stories Ref" class="max-h-full max-w-full object-contain" referrerPolicy="no-referrer">
+                      </div>
+                    </div>
+                    <div class="space-y-2">
+                      <div class="flex items-center gap-2 bg-slate-950/40 p-1.5 rounded-xl border border-white/5">
+                        <button data-story-phase="amanha" class="flex-1 text-center py-2 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-assaiBlue text-white border border-assaiOrange/30 shadow-md">Fase "É Amanhã" (24/06)</button>
+                        <button data-story-phase="hoje" class="flex-1 text-center py-2 rounded-lg text-[10px] font-bold uppercase tracking-wider text-slate-400">Fase "É Hoje" (25/06)</button>
+                      </div>
+                      <div class="story-subfase-block flex items-center gap-2 bg-slate-900/40 p-1 rounded-xl border border-white/5">
+                        <button data-story-subfase="pre-jogo" class="flex-1 text-center py-1.5 rounded-lg text-[9px] font-bold uppercase bg-assaiOrange text-white shadow-sm">🕒 Pré-Jogo</button>
+                        <button data-story-subfase="pos-jogo" class="flex-1 text-center py-1.5 rounded-lg text-[9px] font-bold uppercase text-slate-400">🌙 Pós-Jogo</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="lg:col-span-5 flex justify-center items-center">
+                    <div class="relative w-[210px] h-[373px] bg-slate-950 rounded-[32px] p-2.5 shadow-2xl border-[4px] border-slate-800 flex flex-col justify-between overflow-hidden">
+                      <div class="absolute top-1 left-1/2 -translate-x-1/2 w-14 h-2.5 bg-slate-800 rounded-full z-20"></div>
+                      <div class="absolute top-4 left-3 right-3 z-10">
+                        <div class="flex gap-1 h-0.5 w-full bg-slate-800 mb-1">
+                          <div class="flex-1 bg-white h-full"></div>
+                          <div class="story-mock-segment-indicator flex-1 h-full bg-slate-600"></div>
+                        </div>
+                        <div class="flex items-center gap-1.5 text-[8px] text-white">
+                          <div class="w-4 h-4 rounded-full bg-assaiBlue flex items-center justify-center border border-white/20 p-0.2">
+                            <img src="https://i.imgur.com/wCZYLnN.png" class="w-full h-full object-contain">
+                          </div>
+                          <span class="font-bold">assaiatacadista</span>
+                        </div>
+                      </div>
+                      <div class="story-mock-bg absolute inset-0 z-0 flex flex-col justify-center items-center p-3 pt-12 text-center" style="background-image: linear-gradient(135deg, #001633 0%, #004696 100%)">
+                        <span class="story-mock-label text-[8px] uppercase tracking-widest text-assaiYellow font-extrabold font-mono">24/06 • PRÉ-JOGO</span>
+                        <h3 class="story-mock-text text-white font-display font-black text-[11px] leading-snug mt-1.5 max-w-[150px] uppercase tracking-tight">
+                          É Amanhã! 25/06 | Preços Imbatíveis para encher o carrinho!
+                        </h3>
+                      </div>
+                      <div class="mt-auto w-full text-center pb-3 z-10 px-2 space-y-1">
+                        <div class="inline-flex flex-col items-center gap-1 w-full">
+                          <a href="#" class="story-mock-cta-link bg-white text-assaiBlue rounded-full py-1.5 px-3 text-[10px] font-extrabold shadow-lg flex items-center justify-center gap-1 w-fit transition-all hover:bg-slate-50">
+                            <i data-lucide="external-link" class="w-3 h-3 text-assaiOrange"></i> Veja a loja mais próxima de você!
+                          </a>
+                          <span class="story-mock-sticker-label text-[6px] text-white/70 uppercase tracking-widest bg-black/40 px-2 py-0.5 rounded-full font-mono">Sticker de Link assai.com.br/nossas-lojas</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+          case "whatsapp":
+            return `
+              <div class="space-y-6" id="${prefix}">
+                <div class="border-l-4 border-emerald-400 pl-4 py-1">
+                  <span class="text-xs tracking-widest font-mono text-slate-400 uppercase">${slide.category}</span>
+                  <h2 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-assaiYellow">${slide.title}</h2>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch" data-slide-id="whatsapp">
+                  <div class="lg:col-span-6 space-y-4 flex flex-col justify-between">
+                    <div class="bg-assaiLightBlue/20 border border-slate-800/60 rounded-2xl p-4">
+                      <div class="flex items-start gap-3">
+                        <div class="p-2 bg-emerald-500/10 rounded-xl text-emerald-400 flex-shrink-0">
+                          <i data-lucide="message-square" class="w-5 h-5 fill-emerald-400 stroke-none"></i>
+                        </div>
+                        <div>
+                          <h3 class="font-display font-semibold text-white text-xs md:text-sm">Gatilho Direto: WhatsApp</h3>
+                          <p class="text-xs sm:text-sm text-slate-200 leading-relaxed mt-1">${slide.direcionamentoEstrategico}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="audio-player-card bg-slate-900/40 border border-slate-800 rounded-2xl p-4 flex-grow flex flex-col justify-between">
+                      <div class="mb-3">
+                        <h4 class="text-[11px] sm:text-xs font-bold uppercase text-assaiOrange tracking-widest flex items-center gap-1 font-mono">
+                          <i data-lucide="sparkles" class="w-4 h-4 text-assaiGold"></i> Ação 1 | Áudio de Disparo
+                        </h4>
+                        <p class="text-xs sm:text-sm text-slate-200 mt-1 leading-relaxed">${slide.acoes[0].funcionamento}</p>
+                      </div>
+                      
+                      <!-- Inline Audio Player -->
+                      <div class="bg-[#0b141a] text-[#e9edef] rounded-xl p-4 border border-emerald-950 shadow-md">
+                        <div class="flex items-center gap-2 pb-2 mb-2 border-b border-white/5 text-[9px] text-slate-400">
+                          <div class="w-4 h-4 rounded-full bg-emerald-700 flex items-center justify-center font-bold text-white text-[8px]">G</div>
+                          <span class="font-bold text-slate-300">Gerente Regional Assaí (online)</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                          <button onclick="toggleAudio(this)" class="play-audio-btn w-10 h-10 rounded-full bg-emerald-600 hover:bg-emerald-500 text-slate-950 flex items-center justify-center cursor-pointer shrink-0 transition-all">
+                            <i data-lucide="play" class="w-5 h-5 fill-slate-950 text-slate-950 translate-x-0.5"></i>
+                          </button>
+                          <div class="flex-grow min-w-0">
+                            <!-- Visual waveforms -->
+                            <div class="h-6 flex items-end gap-[1.5px] pb-1 overflow-hidden">
+                              ${soundBarsHeights.map(h => `
+                                <div class="audio-bar flex-1 h-[15%] max-w-[3px] bg-[#8696a0] opacity-40 rounded-sm" data-original-height="${h}"></div>
+                              `).join('')}
+                            </div>
+                            <div class="flex items-center justify-between text-[10px] text-slate-400 mt-1">
+                              <span class="audio-time-current">0:00</span>
+                              <input type="range" class="audio-timeline-range flex-grow mx-2 h-1 accent-cyan-400 bg-slate-800 rounded-lg cursor-pointer" min="0" max="100" value="0" oninput="scrubAudio(this)">
+                              <span>0:16</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <p class="text-xs italic text-[#a3b3bc] bg-slate-950/40 p-3 rounded-lg border border-slate-900 mt-3">"${slide.acoes[0].audioRoteiro}"</p>
+                    </div>
+                  </div>
+                  <div class="lg:col-span-6 bg-slate-900/40 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between">
+                    <div>
+                      <h4 class="text-xs sm:text-sm font-bold uppercase text-assaiGold tracking-widest font-mono">Ação 2 | Sticker Pack</h4>
+                      <p class="text-xs sm:text-sm text-slate-200 mt-1">${slide.acoes[1].funcionamento}</p>
+                    </div>
+                    <div class="flex items-center justify-center py-4">
+                      <div class="relative w-[180px] h-[320px] bg-[#0b141a] rounded-[28px] p-3 border-4 border-slate-800 flex flex-col justify-between shadow-xl">
+                        <div class="absolute top-1 left-1/2 -translate-x-1/2 w-16 h-2 bg-slate-950 rounded-b-md z-20"></div>
+                        <p class="text-[8px] text-slate-400 text-center select-none pt-1">Grupo de Negócios</p>
+                        <div class="flex-1 flex flex-col justify-end space-y-2 pb-2">
+                          <div class="bg-slate-800 text-[8.5px] text-slate-100 p-2 rounded-xl rounded-tl-none self-start max-w-[85%] leading-normal border border-white/5">
+                            <span class="text-cyan-400 font-bold block text-[7px] mb-0.5">Roberto Pizzaria:</span>
+                            Preço bom pro Dia Imbatível?
+                          </div>
+                          <div class="self-end hover:scale-105 transition-transform cursor-pointer">
+                            <div class="whatsapp-sticker-bubble-content bg-[#125ba3] border-2 border-white text-white font-black text-[8px] uppercase tracking-wide px-3 py-2.5 rounded-xl flex flex-col items-center justify-center min-w-[90px] shadow-sm select-none relative">
+                              <span class="text-lg">🛒</span>
+                              <span class="text-[7.5px] leading-none mt-0.5">Abastecido com o</span>
+                              <span class="text-assaiYellow text-[8px] leading-tight font-black">Imbatível!</span>
+                              <div class="absolute -bottom-1 -right-1 bg-assaiOrange text-white text-[4px] px-1.2 py-0.2 rounded-full border border-white font-bold">Assaí</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="space-y-2">
+                      <span class="text-[9px] uppercase tracking-wider font-mono text-slate-400 block text-center">Toque para testar:</span>
+                      <div class="grid grid-cols-3 gap-1.5">
+                        <button data-sticker-idx="0" class="bg-assaiBlue/40 border-assaiOrange text-white ring-1 ring-assaiOrange/25 p-2.5 rounded-xl border text-[10px] font-bold block truncate">🛒 Abastecido</button>
+                        <button data-sticker-idx="1" class="bg-slate-950/40 border-white/5 text-slate-400 p-2.5 rounded-xl border text-[10px] font-bold block truncate hover:bg-slate-900/40">🏃‍♂️ Correndo</button>
+                        <button data-sticker-idx="2" class="bg-slate-950/40 border-white/5 text-slate-400 p-2.5 rounded-xl border text-[10px] font-bold block truncate hover:bg-slate-900/40">🔥 Só Hoje</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+          case "push":
+            return `
+              <div class="space-y-6" id="${prefix}">
+                <div class="border-l-4 border-amber-400 pl-4 py-1">
+                  <span class="text-xs tracking-widest font-mono text-slate-400 uppercase">${slide.category}</span>
+                  <h2 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-assaiYellow">${slide.title}</h2>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch" data-slide-id="push">
+                  <div class="lg:col-span-5 flex flex-col justify-between">
+                    <div class="bg-assaiLightBlue/20 border border-slate-800/60 rounded-2xl p-4 flex flex-col justify-between h-full">
+                      <div class="flex items-start gap-3">
+                        <div class="p-2 bg-amber-500/10 rounded-xl text-amber-400 flex-shrink-0">
+                          <i data-lucide="bell" class="w-5 h-5 fill-amber-400 stroke-none"></i>
+                        </div>
+                        <div>
+                          <h3 class="font-display font-semibold text-white text-xs md:text-sm">Gatilho de Impulso</h3>
+                          <p class="text-xs sm:text-sm text-slate-200 leading-relaxed mt-1">${slide.direcionamentoEstrategico}</p>
+                        </div>
+                      </div>
+                      <div class="pt-3 border-t border-white/10 mt-5">
+                        <p class="text-sm font-semibold text-assaiGold flex items-center gap-2">
+                          <i data-lucide="clock" class="w-4.5 h-4.5 text-assaiOrange"></i>
+                          <span>${slide.metrica}</span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="lg:col-span-7 bg-slate-950/30 border border-slate-800 rounded-2xl p-4 flex flex-col lg:flex-row gap-5 items-center">
+                    <div class="flex-1 space-y-2.5 w-full">
+                      <span class="text-[10px] font-bold font-mono text-assaiYellow tracking-widest block uppercase mb-1">Toque para testar:</span>
+                      ${slide.ideias.map(idea => `
+                        <button data-push-id="${idea.id}" class="w-full text-left p-3.5 rounded-xl border relative overflow-hidden transition-all ${idea.id === 1 ? "bg-gradient-to-r from-[#003674] to-[#004696] border-assaiOrange shadow-md scale-[1.02]" : "bg-slate-900/40 border-white/5 hover:bg-slate-800/40"}">
+                          ${idea.id === 1 ? `<div class="active-indicator absolute top-0 bottom-0 left-0 w-1 bg-gradient-to-b from-assaiOrange to-assaiGold"></div>` : ""}
+                          <div class="flex items-start gap-2.5">
+                            <div class="icon-bg p-1.5 rounded-lg ${idea.id === 1 ? "bg-assaiOrange/20" : "bg-slate-700/25"} shrink-0">
+                              <i data-lucide="${idea.id === 1 ? "map-pin" : (idea.id === 2 ? "flame" : (idea.id === 3 ? "shopping-cart" : "sparkles"))}" class="w-4 h-4 text-assaiOrange"></i>
+                            </div>
+                            <div class="min-w-0">
+                              <h5 class="title-text font-bold text-xs transition-colors ${idea.id === 1 ? "text-white" : "text-slate-200"}">${idea.titulo}</h5>
+                              <p class="text-[11px] text-slate-350 mt-1 truncate leading-tight">${idea.texto}</p>
+                            </div>
+                          </div>
+                        </button>
+                      `).join('')}
+                    </div>
+                    
+                    <div class="relative w-[180px] h-[310px] bg-slate-950 rounded-[30px] p-2 border-4 border-slate-800 shrink-0 flex flex-col justify-between overflow-hidden shadow-xl">
+                      <div class="absolute top-1 left-1/2 -translate-x-1/2 w-16 h-2 bg-slate-800 rounded-full z-20"></div>
+                      <div class="text-center pt-3 text-white font-sans select-none">
+                        <p class="text-[7px] text-assaiYellow font-mono uppercase tracking-widest mb-0.5">Quinta-feira, 25 de Junho</p>
+                        <h2 class="text-2xl font-light leading-none">09:41</h2>
+                      </div>
+                      <div class="flex-grow flex flex-col justify-center items-center px-1">
+                        <div class="w-full bg-[#1e293b]/95 rounded-xl p-2.5 shadow-md border border-[#334155]/60 relative">
+                          <div class="flex items-center justify-between pb-1 border-b border-[#334155]/40 mb-1.5 text-[8px] text-slate-400">
+                            <span class="font-bold text-white tracking-widest uppercase">MEU ASSAÍ</span>
+                            <span>agora</span>
+                          </div>
+                          <h4 class="text-white font-bold text-[9px] flex items-center gap-1">
+                            <span class="push-mock-icon-slot"><i data-lucide="map-pin" class="w-3.5 h-3.5 text-assaiOrange"></i></span>
+                            <span class="push-mock-title">Raio de 3km da loja</span>
+                          </h4>
+                          <p class="push-mock-text text-slate-300 text-[8.5px] mt-0.5 leading-tight">${slide.ideias[0].texto}</p>
+                        </div>
+                      </div>
+                      <div class="text-center text-[7px] text-slate-400 pb-1 font-mono">Deslize para ver</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+          case "retail-media-waze":
+            return `
+              <div class="space-y-6" id="${prefix}">
+                <div class="border-l-4 border-orange-500 pl-4 py-1">
+                  <span class="text-xs tracking-widest font-mono text-slate-400 uppercase">${slide.category}</span>
+                  <h2 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-assaiYellow">${slide.title}</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                  ${slide.secoes.map((secao, sIdx) => {
+                    const isRadio = sIdx === 0;
+                    return `
+                      <div class="bg-slate-900/50 border border-white/5 rounded-2xl p-6 flex flex-col justify-between hover:border-slate-800 transition-all shadow-md">
+                        <div>
+                          <div class="flex items-center justify-between pb-2 mb-3 border-b border-white/10">
+                            <div class="flex items-center gap-2">
+                              <div class="w-10 h-10 rounded-lg ${isRadio ? "bg-orange-500/10 text-orange-400" : "bg-blue-500/10 text-blue-400"} flex items-center justify-center">
+                                <i data-lucide="${isRadio ? "radio" : "map-pin"}" class="w-5 h-5"></i>
+                              </div>
+                              <h3 class="font-display font-bold text-base md:text-lg text-white">${secao.title}</h3>
+                            </div>
+                            <span class="text-[9px] font-mono uppercase bg-slate-950 px-2 py-0.5 rounded font-bold text-assaiGold">${isRadio ? "PDV" : "Trânsito"}</span>
+                          </div>
+                          <div class="space-y-3">
+                            <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">${secao.direcionamentoEstrategico}</p>
+                            <span class="inline-block text-xs font-semibold bg-slate-950 border border-slate-800 text-white px-3 py-1 rounded-full">${secao.formato}</span>
+                          </div>
+                        </div>
+                        <div class="mt-6 p-4 rounded-xl bg-slate-950 border border-slate-900 relative">
+                          <p class="text-[9px] uppercase tracking-widest font-mono text-assaiOrange font-bold mb-1.5">${isRadio ? "Locução" : "Copy Waze"}</p>
+                          <p class="text-xs md:text-sm italic text-slate-200 font-mono leading-relaxed bg-[#0b141a]/40 p-3 rounded border border-white/5">"${secao.roteiro}"</p>
+                        </div>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+            `;
+          case "cronograma":
+            return `
+              <div class="space-y-6" id="${prefix}">
+                <div class="border-l-4 border-assaiYellow pl-4 py-1">
+                  <span class="text-xs tracking-widest font-mono text-slate-400 uppercase">${slide.category}</span>
+                  <h2 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-assaiYellow">${slide.title}</h2>
+                </div>
+                <p class="text-sm md:text-base text-slate-200 max-w-4xl font-light">Acompanhe o fluxo coordenado de disparos planejado para maximizar a conversão durante as duas datas fundamentais do Dia Imbatível.</p>
+                <div class="space-y-4" data-slide-id="cronograma">
+                  <div class="flex flex-wrap items-center justify-between gap-2 bg-slate-950/40 p-1.5 rounded-xl border border-white/5">
+                    <span class="text-[10px] sm:text-xs pl-2 font-bold font-mono tracking-widest uppercase text-assaiGold">Visualização:</span>
+                    <div class="flex gap-1">
+                      <button data-cronograma-filter="both" class="px-3.5 py-1.5 bg-assaiOrange text-white text-xs font-bold rounded-lg transition-all">Geral (24 e 25)</button>
+                      <button data-cronograma-filter="24" class="px-3.5 py-1.5 text-slate-400 hover:text-slate-200 text-xs font-bold rounded-lg transition-all">Dia 24/06</button>
+                      <button data-cronograma-filter="25" class="px-3.5 py-1.5 text-slate-400 hover:text-slate-200 text-xs font-bold rounded-lg transition-all">Dia 25/06</button>
+                    </div>
+                  </div>
+                  <div class="overflow-x-auto rounded-xl border border-slate-800 shadow-md bg-slate-950/20">
+                    <table class="w-full text-left border-collapse text-xs sm:text-sm md:text-base">
+                      <thead>
+                        <tr class="bg-slate-900 border-b border-slate-800 text-xs font-mono text-assaiYellow uppercase tracking-wider">
+                           <th class="py-3.5 px-4 font-semibold">Canal / Plataforma</th>
+                           <th class="col-dia-24-header py-3.5 px-4 border-l border-slate-800">Dia 24/06 (Aquecimento)</th>
+                           <th class="col-dia-25-header py-3.5 px-4 border-l border-slate-800">Dia 25/06 (Urgência)</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        ${slide.canais.map(item => `
+                          <tr class="border-b border-white/5 hover:bg-slate-900/40">
+                            <td class="py-3.5 px-4 font-bold text-white flex items-center gap-1.5">
+                              <span class="w-1.5 h-1.5 rounded-full bg-assaiOrange shrink-0"></span>${item.canal}
+                            </td>
+                            <td class="col-dia-24-cell py-3.5 px-4 border-l border-white/5">
+                              <p class="text-slate-100 font-medium leading-relaxed">${item.dia24}</p>
+                              <span class="text-[10px] sm:text-xs text-assaiGold font-semibold font-mono bg-white/5 border border-white/5 px-2 py-0.5 rounded mt-2 inline-flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> ${item.hora24}</span>
+                            </td>
+                            <td class="col-dia-25-cell py-3.5 px-4 border-l border-white/5">
+                              <p class="text-slate-100 font-medium leading-relaxed">${item.dia25}</p>
+                              <span class="text-[10px] sm:text-xs text-assaiOrange font-semibold font-mono bg-white/5 border border-white/5 px-2 py-0.5 rounded mt-2 inline-flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> ${item.hora25}</span>
+                            </td>
+                          </tr>
+                        `).join('')}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            `;
+          case "conclusao":
+            return `
+              <div class="flex flex-col items-center justify-center text-center py-8 px-4 h-full relative" id="${prefix}">
+                <div class="w-20 h-20 bg-gradient-to-tr from-assaiOrange to-assaiGold rounded-2xl flex items-center justify-center text-slate-950 mb-8 shadow-md transform rotate-3">
+                  <i data-lucide="trending-up" class="w-10 h-10"></i>
+                </div>
+                <h2 class="text-xs sm:text-sm uppercase font-mono tracking-[0.2em] text-assaiGold font-bold mb-4">${slide.category}</h2>
+                <h3 class="text-2xl md:text-4xl lg:text-5xl font-display font-extrabold tracking-tight text-assaiYellow max-w-4xl leading-snug">
+                  "${slide.slogan}"
+                </h3>
+                <p class="text-sm md:text-base lg:text-lg text-slate-200 max-w-3xl mx-auto mt-6 leading-relaxed font-light">${slide.conclusaoTexto}</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-10 w-full max-w-2xl">
+                  <div class="bg-assaiLightBlue/25 border border-slate-800 rounded-xl p-4">
+                    <span class="text-[10px] font-mono uppercase text-assaiGold block mb-0.5">Canais On-line</span>
+                    <p class="text-sm font-semibold text-white">Audiência Qualificada</p>
+                  </div>
+                  <div class="bg-assaiLightBlue/25 border border-slate-800 rounded-xl p-4">
+                    <span class="text-[10px] font-mono uppercase text-assaiOrange block mb-0.5">Gatilhos Diretos</span>
+                    <p class="text-sm font-semibold text-white">Urgência Próxima</p>
+                  </div>
+                  <div class="bg-assaiLightBlue/25 border border-slate-800 rounded-xl p-4">
+                    <span class="text-[10px] font-mono uppercase text-assaiYellow block mb-0.5">Conversão Fiel</span>
+                    <p class="text-sm font-semibold text-white">Resultados Reais</p>
+                  </div>
+                </div>
+              </div>
+            `;
+          case "fechamento":
+            return `
+              <div class="flex flex-col items-center justify-center text-center py-10 px-4 h-full relative" id="${prefix}">
+                <div class="scale-125 mb-8 flex justify-center">
+                  <img src="https://i.imgur.com/wCZYLnN.png" alt="Assaí" class="h-16 w-auto object-contain">
+                </div>
+                <p class="text-slate-400 font-mono text-[10px] sm:text-xs tracking-wider uppercase mb-6">Dia 25 de Junho • Planejamento Integrado</p>
+                <h2 class="text-3xl md:text-5xl lg:text-6xl font-display font-black text-assaiYellow uppercase tracking-wide">${slide.subtitle}</h2>
+                <div class="mt-8 pt-5 border-t border-slate-800 w-64 mx-auto space-y-2">
+                  <p class="text-[10px] font-mono uppercase tracking-[0.2em] text-assaiOrange">Apresentado por</p>
+                  <h3 class="font-display font-extrabold text-sm sm:text-base tracking-widest text-[#fff]">${slide.parceiro}</h3>
+                  <a href="https://${slide.site}" target="_blank" class="text-xs sm:text-sm text-slate-400 hover:text-white transition-colors block underline mt-2">${slide.site}</a>
+                </div>
+                <div class="mt-12 bg-slate-900/60 border border-white/5 px-6 py-2.5 rounded-full text-xs sm:text-sm text-slate-300 inline-flex items-center gap-2">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  Pronto para Execução
+                </div>
+              </div>
+            `;
+          default:
+            return `<div class="p-4 text-center text-slate-400">Layout indisponível.</div>`;
+        }
+      }
+      */
+
+      // Sidebar render
+      function renderSidebar() {
+        const sidebarSlot = document.getElementById("sidebar-slide-items");
+        let html = "";
+        slidesData.forEach((slide, idx) => {
+          html += `
+            <button id="sidebar-slide-${idx}" onclick="handleSidebarClick(${idx})" class="w-full text-left p-1.5 rounded-lg transition-all flex items-center gap-2 group cursor-pointer hover:bg-white/5 text-slate-400 hover:text-slate-200 border border-transparent">
+              <span class="circle-sequence w-4 h-4 rounded-full flex items-center justify-center font-mono text-[9px] font-bold shrink-0 bg-slate-800 text-slate-400">
+                ${slide.number}
+              </span>
+              <span class="text-[11px] truncate text-slate-300">${slide.title}</span>
+            </button>
+          `;
+        });
+        sidebarSlot.innerHTML = html;
+      }
+
+      // Report mode renderer
+      function renderReport() {
+        const reportSlot = document.getElementById("report-list-slot");
+        let html = "";
+        slidesData.forEach(slide => {
+          html += `
+            <section class="bg-assaiDarkBlue/25 border border-white/5 hover:border-assaiOrange/20 rounded-3xl p-6 md:p-8 relative hover:shadow-lg transition-all scroll-mt-24 overflow-hidden">
+              <div class="absolute top-4 right-6 flex items-center gap-2 font-mono text-[9px] text-assaiGold font-bold select-none z-10">
+                <span class="px-2 py-0.5 bg-white/5 border border-white/10 rounded">PÁGINA ${slide.number}</span>
+              </div>
+              ${renderSlide(slide, "report")}
+            </section>
+          `;
+        });
+        reportSlot.innerHTML = html;
+      }
+
+      // DOTS render in slideshow view
+      function renderDots() {
+        const dotsSlot = document.getElementById("slide-index-dots-container");
+        let html = "";
+        slidesData.forEach((_, idx) => {
+          html += `
+            <button onclick="goToSlide(${idx})" class="slide-index-dot h-2 rounded-full cursor-pointer transition-all ${idx === 0 ? "w-6 bg-assaiOrange" : "w-2 bg-slate-700 hover:bg-slate-500"}" title="Slide ${idx+1}"></button>
+          `;
+        });
+        dotsSlot.innerHTML = html;
+      }
+
+      // Push notification templates
+      const pushData = [
+        { id: 1, titulo: "1. Geofencing (Raio de 3km)", texto: "Você está muito perto de economizar! O Dia Imbatível está acontecendo na loja ao seu lado. Faz a curva e vem!" },
+        { id: 2, titulo: "2. Contagem Regressiva (Urgência)", texto: "Só restam 4 horas! O Dia Imbatível está acabando e os estoques estão derretendo. Corre!" },
+        { id: 3, titulo: "3. Humor (Carrinho Vazio)", texto: "Seu carrinho mandou avisar que tá com saudade... Aproveita os preços imbatíveis de hoje para resolver isso!" },
+        { id: 4, titulo: "4. Segmentado (Histórico)", texto: "Alerta de Geladeira Cheia! As marcas de bebidas que você mais gosta estão com descontos imbatíveis hoje. Clique e confira!" }
+      ];
+
+      // Stories Template Switcher Data
+      const storiesTexts = {
+        amanha: {
+          'pre-jogo': "É Amanhã! 25/06 | Preços Imbatíveis para encher o carrinho!",
+          'pos-jogo': "Os precinhos do Assaí continuam jogando no ataque! | Prepare-se para amanhã!"
+        },
+        hoje: "É hoje! 25/06 | Preços ainda mais baixos! Corra pro Assaí e aproveite!"
+      };
+      const storiesCtas = {
+        amanha: "Veja a loja mais próxima de você!",
+        hoje: "Confira as ofertas"
+      };
+      const storiesUrls = {
+        amanha: "assai.com.br/nossas-lojas",
+        hoje: "assai.com.br/ofertas"
+      };
+
+      // Updates Stories Mockup
+      function updateStoryMockup(parentCard) {
+        const activePhaseTab = parentCard.querySelector('[data-story-phase].bg-assaiBlue');
+        const activeSubTab = parentCard.querySelector('[data-story-subfase].bg-assaiOrange');
+        
+        const phase = activePhaseTab ? activePhaseTab.getAttribute('data-story-phase') : 'amanha';
+        const subfase = activeSubTab ? activeSubTab.getAttribute('data-story-subfase') : 'pre-jogo';
+        
+        const labelEl = parentCard.querySelector('.story-mock-label');
+        const textEl = parentCard.querySelector('.story-mock-text');
+        const ctaLinkEl = parentCard.querySelector('.story-mock-cta-link');
+        const bgEl = parentCard.querySelector('.story-mock-bg');
+        const indicatorEl = parentCard.querySelector('.story-mock-segment-indicator');
+        
+        let labelText = "";
+        let bodyText = "";
+        let ctaText = "";
+        let ctaUrl = "";
+        
+        if (phase === 'amanha') {
+          labelText = subfase === 'pre-jogo' ? "24/06 • PRÉ-JOGO" : "24/06 • PÓS-JOGO";
+          bodyText = storiesTexts.amanha[subfase];
+          ctaText = storiesCtas.amanha;
+          ctaUrl = storiesUrls.amanha;
+          
+          bgEl.style.backgroundImage = "linear-gradient(135deg, #001633 0%, #004696 100%)";
+          if (indicatorEl) indicatorEl.className = "story-mock-segment-indicator flex-1 h-full bg-slate-600";
+        } else {
+          labelText = "25/06 • É HOJE";
+          bodyText = storiesTexts.hoje;
+          ctaText = storiesCtas.hoje;
+          ctaUrl = storiesUrls.hoje;
+          
+          bgEl.style.backgroundImage = "linear-gradient(135deg, #740000 0%, #FF7300 100%)";
+          if (indicatorEl) indicatorEl.className = "story-mock-segment-indicator flex-1 h-full bg-white";
+        }
+        
+        if (labelEl) labelEl.textContent = labelText;
+        if (textEl) textEl.textContent = bodyText;
+        if (ctaLinkEl) {
+          ctaLinkEl.setAttribute('href', 'https://' + ctaUrl);
+          ctaLinkEl.innerHTML = `<i data-lucide="external-link" class="w-3 h-3 text-assaiOrange"></i> ${ctaText}`;
+          lucide.createIcons();
+        }
+        
+        const stickerLabel = parentCard.querySelector('.story-mock-sticker-label');
+        if (stickerLabel) stickerLabel.textContent = `Sticker de Link ${ctaUrl}`;
+      }
+
+      // Audio waves update
+      function updateAudioProgress(parentCard, progress) {
+        const bars = parentCard.querySelectorAll('.audio-bar');
+        if (!bars.length) return;
+        const barCount = bars.length;
+        const activeCount = Math.round((progress / 100) * barCount);
+
+        bars.forEach((bar, idx) => {
+          if (idx < activeCount) {
+            bar.style.backgroundColor = '#53bdeb';
+            bar.style.opacity = '1';
+          } else {
+            bar.style.backgroundColor = '#8696a0';
+            bar.style.opacity = '0.4';
+          }
+
+          if (globalAudioPlaying) {
+            const randomAmplify = Math.sin(Date.now() / 150 + idx) * 8;
+            const originalHeight = parseFloat(bar.getAttribute('data-original-height'));
+            const finalHeight = Math.min(100, Math.max(10, originalHeight + randomAmplify));
+            bar.style.height = finalHeight + '%';
+          }
+        });
+      }
+
+      // Audio toggler
+      function toggleAudio(btn) {
+        const parentCard = btn.closest('.audio-player-card') || btn.closest('section');
+        if (!parentCard) return;
+
+        if (globalAudioPlaying && activeAudioParent === parentCard) {
+          pauseGlobalAudio();
+        } else {
+          if (activeAudioParent && activeAudioParent !== parentCard) {
+            pauseGlobalAudio();
+          }
+          activeAudioParent = parentCard;
+          gAudio.play().catch(err => console.warn(err));
+          globalAudioPlaying = true;
+          
+          btn.innerHTML = '<i data-lucide="pause" class="w-5 h-5 fill-slate-950 text-slate-950"></i>';
+          lucide.createIcons();
+
+          if (audioTimer) clearInterval(audioTimer);
+          audioTimer = setInterval(() => {
+            const current = gAudio.currentTime;
+            if (current >= 16) {
+              gAudio.currentTime = 0;
+              pauseGlobalAudio();
+              updateProgressVisuals(parentCard, 0);
+            } else {
+              const prog = (current / 16) * 100;
+              updateProgressVisuals(parentCard, prog);
+            }
+          }, 50);
+        }
+      }
+
+      function updateProgressVisuals(parentCard, progress) {
+        const range = parentCard.querySelector('.audio-timeline-range');
+        const timer = parentCard.querySelector('.audio-time-current');
+        if (range) range.value = progress;
+        if (timer) {
+          const secs = Math.floor((progress / 100) * 16);
+          timer.textContent = `0:${secs.toString().padStart(2, "0")}`;
+        }
+        updateAudioProgress(parentCard, progress);
+      }
+
+      function pauseGlobalAudio() {
+        gAudio.pause();
+        globalAudioPlaying = false;
+        if (audioTimer) clearInterval(audioTimer);
+        if (activeAudioParent) {
+          const playBtn = activeAudioParent.querySelector('.play-audio-btn');
+          if (playBtn) {
+            playBtn.innerHTML = '<i data-lucide="play" class="w-5 h-5 fill-slate-950 text-slate-950 translate-x-0.5"></i>';
+            lucide.createIcons();
+          }
+        }
+      }
+
+      function scrubAudio(input) {
+        const parentCard = input.closest('.audio-player-card') || input.closest('section');
+        if (!parentCard) return;
+        const val = parseFloat(input.value);
+        gAudio.currentTime = (val / 100) * 16;
+        updateProgressVisuals(parentCard, val);
+      }
+
+      // Navigation slides slideshow view
+      let currentSlideIndex = 0;
+      let currentViewMode = "slides";
+
+      function goToSlide(index) {
+        pauseGlobalAudio();
+        currentSlideIndex = index;
+
+        // Render active slide
+        const contentSlot = document.getElementById('slides-content-slot');
+        const activeSlideObj = slidesData[index];
+        
+        // Update header slide trackings
+        const labelCat = document.getElementById('slide-header-category');
+        if (labelCat) labelCat.textContent = activeSlideObj.category;
+        
+        // Render content
+        contentSlot.innerHTML = renderSlide(activeSlideObj, "slides");
+
+        // Reconstitute active indicators on Sidebar Items list
+        document.querySelectorAll('[id^="sidebar-slide-"]').forEach((btn, idx) => {
+          const circle = btn.querySelector('.circle-sequence');
+          
+          if (idx === index) {
+            btn.className = "w-full text-left p-1.5 rounded-lg transition-all flex items-center gap-2 cursor-pointer bg-[#004696]/60 text-white border border-assaiOrange/40 shadow-sm font-semibold";
+            if (circle) circle.className = "circle-sequence w-4 h-4 rounded-full flex items-center justify-center font-mono text-[9px] font-bold shrink-0 bg-assaiOrange text-white";
+            
+            // Safely scroll container without shifting the entire page view
+            const container = document.getElementById('sidebar-slide-items');
+            if (container) {
+              const btnTop = btn.offsetTop;
+              const btnHeight = btn.offsetHeight;
+              const containerScrollTop = container.scrollTop;
+              const containerHeight = container.clientHeight;
+              
+              if (btnTop < containerScrollTop) {
+                container.scrollTo({ top: btnTop - 5, behavior: 'smooth' });
+              } else if (btnTop + btnHeight > containerScrollTop + containerHeight) {
+                container.scrollTo({ top: btnTop + btnHeight - containerHeight + 5, behavior: 'smooth' });
+              }
+            }
+          } else {
+            btn.className = "w-full text-left p-1.5 rounded-lg transition-all flex items-center gap-2 cursor-pointer hover:bg-white/5 text-slate-400 hover:text-slate-200 border border-transparent";
+            if (circle) circle.className = "circle-sequence w-4 h-4 rounded-full flex items-center justify-center font-mono text-[9px] font-bold shrink-0 bg-slate-800 text-slate-400";
+          }
+        });
+
+        // Highlight Active Dot
+        document.querySelectorAll('.slide-index-dot').forEach((dot, idx) => {
+          if (idx === index) {
+            dot.className = "slide-index-dot h-2 rounded-full cursor-pointer transition-all w-6 bg-assaiOrange";
+          } else {
+            dot.className = "slide-index-dot h-2 rounded-full cursor-pointer transition-all w-2 bg-slate-700 hover:bg-slate-500";
+          }
+        });
+
+        // Previous/Next controllers disable state
+        const prevBtn = document.getElementById('btn-slide-prev');
+        const nextBtn = document.getElementById('btn-slide-next');
+        if (prevBtn) prevBtn.disabled = (index === 0);
+        if (nextBtn) nextBtn.disabled = (index === slidesData.length - 1);
+
+        // Progress text
+        const currHeaderNum = document.getElementById('header-current-slide-num');
+        const progPctVal = document.getElementById('footer-progress-percentage-val');
+        if (currHeaderNum) currHeaderNum.textContent = (index + 1);
+        if (progPctVal) progPctVal.textContent = Math.round(((index + 1) / slidesData.length) * 100) + '%';
+
+        // Re-compile icons
+        lucide.createIcons();
+      }
+
+      function navigateSlide(direction) {
+        const target = currentSlideIndex + direction;
+        if (target >= 0 && target < slidesData.length) {
+          goToSlide(target);
+        }
+      }
+
+      function handleSidebarClick(idx) {
+        if (currentViewMode !== 'slides') {
+          setViewMode('slides');
+        }
+        goToSlide(idx);
+      }
+
+      window.switchPhase = function(phaseNum, btnEl) {
+        // Find slide element or document-level elements
+        const slideContainer = btnEl ? btnEl.closest('.space-y-8') || btnEl.closest('.animate-fade-in') : document.getElementById('slides-content-slot');
+        if (!slideContainer) return;
+        
+        // Hide all phases within this scope
+        slideContainer.querySelectorAll('.timeline-phase-content').forEach(el => el.classList.add('hidden'));
+        slideContainer.querySelectorAll('.timeline-phase-btn').forEach(btn => {
+          btn.className = "timeline-phase-btn text-left p-4.5 rounded-2xl border-2 border-slate-800 text-slate-400 bg-slate-900/30 hover:bg-slate-800/40 hover:text-slate-200 transition-all duration-300 flex items-center gap-3.5 hover:translate-x-1 cursor-pointer";
+          const subCircle = btn.querySelector('.w-10');
+          if (subCircle) {
+            subCircle.className = "w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center font-bold text-sm shrink-0";
+          }
+        });
+        
+        // Show target phase
+        const targetPhase = slideContainer.querySelector(`#phase-${phaseNum}`);
+        if (targetPhase) targetPhase.classList.remove('hidden');
+        
+        // Highlight active button
+        const targetBtn = btnEl || slideContainer.querySelector(`#btn-phase-${phaseNum}`);
+        if (targetBtn) {
+          const subCircle = targetBtn.querySelector('.w-10');
+          if (phaseNum === 1) {
+            targetBtn.className = "timeline-phase-btn text-left p-4.5 rounded-2xl border-2 border-transparent bg-assaiOrange text-white shadow-xl transition-all duration-300 flex items-center gap-3.5 hover:translate-x-1 cursor-pointer";
+            if (subCircle) subCircle.className = "w-10 h-10 rounded-full bg-white/20 flex items-center justify-center font-black text-sm shrink-0";
+          } else if (phaseNum === 2) {
+            targetBtn.className = "timeline-phase-btn text-left p-4.5 rounded-2xl border-2 border-transparent bg-assaiGold text-slate-950 shadow-xl transition-all duration-300 flex items-center gap-3.5 hover:translate-x-1 cursor-pointer";
+            if (subCircle) subCircle.className = "w-10 h-10 rounded-full bg-black/10 flex items-center justify-center font-black text-sm shrink-0";
+          } else if (phaseNum === 3) {
+            targetBtn.className = "timeline-phase-btn text-left p-4.5 rounded-2xl border-2 border-transparent bg-emerald-400 text-slate-950 shadow-xl transition-all duration-300 flex items-center gap-3.5 hover:translate-x-1 cursor-pointer";
+            if (subCircle) subCircle.className = "w-10 h-10 rounded-full bg-black/10 flex items-center justify-center font-black text-sm shrink-0";
+          }
+        }
+      }
+
+      function setViewMode(mode) {
+        currentViewMode = mode;
+        pauseGlobalAudio();
+
+        const slidesBtn = document.getElementById('toggle-view-slides');
+        const reportBtn = document.getElementById('toggle-view-report');
+        const slidesPane = document.getElementById('slide-presentation-inner');
+        const reportPane = document.getElementById('report-view-container');
+        const appRoot = document.getElementById('app-root-container');
+
+        if (mode === 'slides') {
+          slidesBtn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wider flex items-center gap-1.5 transition-all cursor-pointer bg-assaiOrange text-white shadow-lg font-bold";
+          reportBtn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wider flex items-center gap-1.5 transition-all cursor-pointer text-white/60 hover:text-white";
+          slidesPane.classList.remove('hidden');
+          reportPane.classList.add('hidden');
+          goToSlide(currentSlideIndex);
+        } else {
+          slidesBtn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wider flex items-center gap-1.5 transition-all cursor-pointer text-white/60 hover:text-white";
+          reportBtn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wider flex items-center gap-1.5 transition-all cursor-pointer bg-assaiOrange text-white shadow-lg font-bold";
+          slidesPane.classList.add('hidden');
+          reportPane.classList.remove('hidden');
+
+          // Clean active classes on sidebar buttons
+          document.querySelectorAll('[id^="sidebar-slide-"]').forEach((btn, idx) => {
+            btn.className = "w-full text-left p-1.5 rounded-lg transition-all flex items-center gap-2 cursor-pointer hover:bg-white/5 text-slate-400 hover:text-slate-200 border border-transparent";
+            const circle = btn.querySelector('.circle-sequence');
+            if (circle) circle.className = "circle-sequence w-4 h-4 rounded-full flex items-center justify-center font-mono text-[9px] font-bold shrink-0 bg-slate-800 text-slate-400";
+          });
+        }
+        lucide.createIcons();
+      }
+
+      // Fullscreen support API
+      let isFullscreen = false;
+      function toggleFullscreen() {
+        const body = document.documentElement;
+        if (!document.fullscreenElement) {
+          body.requestFullscreen()
+            .then(() => { isFullscreen = true; updateFullscreenIcon(); })
+            .catch(err => console.error(err));
+        } else {
+          document.exitFullscreen();
+          isFullscreen = false;
+          updateFullscreenIcon();
+        }
+      }
+
+      function updateFullscreenIcon() {
+        const btn = document.getElementById('btn-fullscreen-toggle');
+        if (document.fullscreenElement) {
+          btn.innerHTML = '<i data-lucide="minimize-2" class="w-4 h-4 text-assaiGold"></i>';
+          btn.setAttribute('title', 'Sair da Tela Cheia');
+        } else {
+          btn.innerHTML = '<i data-lucide="maximize-2" class="w-4 h-4 text-assaiGold"></i>';
+          btn.setAttribute('title', 'Tela Cheia');
+        }
+        lucide.createIcons();
+      }
+
+      document.addEventListener('fullscreenchange', () => {
+        isFullscreen = !!document.fullscreenElement;
+        updateFullscreenIcon();
+      });
+
+      // Keyboard support
+      document.addEventListener('keydown', (e) => {
+        if (currentViewMode !== 'slides') return;
+        if (e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") {
+          e.preventDefault();
+          navigateSlide(1);
+        } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
+          e.preventDefault();
+          navigateSlide(-1);
+        } else if (e.key === "Home") {
+          e.preventDefault();
+          goToSlide(0);
+        } else if (e.key === "End") {
+          e.preventDefault();
+          goToSlide(slidesData.length - 1);
+        }
+      });
+
+      // Modular Scoped Event Listeners (Global dispatch for active and report elements)
+      document.addEventListener('click', function(e) {
+        // 1. Stories Tab Switches
+        const tabPhase = e.target.closest('[data-story-phase]');
+        if (tabPhase) {
+          const parentCard = tabPhase.closest('[data-slide-id="stories"]');
+          parentCard.querySelectorAll('[data-story-phase]').forEach(btn => {
+            btn.className = "flex-1 text-center py-2 rounded-lg text-[10px] font-bold uppercase tracking-wider text-slate-400";
+          });
+          tabPhase.className = "flex-1 text-center py-2 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-assaiBlue text-white border border-assaiOrange/30 shadow-md";
+          
+          const subfaseBlock = parentCard.querySelector('.story-subfase-block');
+          if (tabPhase.getAttribute('data-story-phase') === 'amanha') {
+            subfaseBlock.classList.remove('hidden');
+          } else {
+            subfaseBlock.classList.add('hidden');
+          }
+          updateStoryMockup(parentCard);
+        }
+
+        const tabSub = e.target.closest('[data-story-subfase]');
+        if (tabSub) {
+          const parentCard = tabSub.closest('[data-slide-id="stories"]');
+          parentCard.querySelectorAll('[data-story-subfase]').forEach(btn => {
+            btn.className = "flex-1 text-center py-1.5 rounded-lg text-[9px] font-bold uppercase text-slate-400";
+          });
+          tabSub.className = "flex-1 text-center py-1.5 rounded-lg text-[9px] font-bold uppercase bg-assaiOrange text-white shadow-sm";
+          updateStoryMockup(parentCard);
+        }
+
+        // 2. Push Notification Option Selectors
+        const pushBtn = e.target.closest('[data-push-id]');
+        if (pushBtn) {
+          const parentCard = pushBtn.closest('[data-slide-id="push"]');
+          const pushId = parseInt(pushBtn.getAttribute('data-push-id'));
+          
+          parentCard.querySelectorAll('[data-push-id]').forEach(btn => {
+            btn.className = "w-full text-left p-3 rounded-xl border relative overflow-hidden transition-all bg-slate-900/40 border-white/5 hover:bg-slate-800/40";
+            btn.querySelector('.active-indicator')?.remove();
+            const bgContainer = btn.querySelector('.icon-bg');
+            if (bgContainer) bgContainer.className = "icon-bg p-1.5 rounded-lg bg-slate-700/25 shrink-0";
+            const textHeader = btn.querySelector('.title-text');
+            if (textHeader) { textHeader.className = "title-text font-semibold text-[11px] text-slate-300"; }
+          });
+
+          pushBtn.className = "w-full text-left p-3 rounded-xl border relative overflow-hidden transition-all bg-gradient-to-r from-[#003674] to-[#004696] border-assaiOrange shadow-md scale-[1.02]";
+          pushBtn.insertAdjacentHTML('afterbegin', '<div class="active-indicator absolute top-0 bottom-0 left-0 w-1 bg-gradient-to-b from-assaiOrange to-assaiGold"></div>');
+          const activeBg = pushBtn.querySelector('.icon-bg');
+          if (activeBg) activeBg.className = "icon-bg p-1.5 rounded-lg bg-assaiOrange/20 shrink-0";
+          const activeText = pushBtn.querySelector('.title-text');
+          if (activeText) { activeText.className = "title-text font-semibold text-[11px] text-white"; }
+
+          // Update screen
+          const titleSlot = parentCard.querySelector('.push-mock-title');
+          const textSlot = parentCard.querySelector('.push-mock-text');
+          const iconSlot = parentCard.querySelector('.push-mock-icon-slot');
+
+          const match = pushData.find(p => p.id === pushId);
+          if (match && titleSlot && textSlot) {
+            titleSlot.textContent = match.titulo.substring(3);
+            textSlot.textContent = match.texto;
+
+            let iconHtml = '';
+            if (pushId === 1) iconHtml = '<i data-lucide="map-pin" class="w-3.5 h-3.5 text-assaiOrange"></i>';
+            else if (pushId === 2) iconHtml = '<i data-lucide="flame" class="w-3.5 h-3.5 text-assaiOrange"></i>';
+            else if (pushId === 3) iconHtml = '<i data-lucide="shopping-cart" class="w-3.5 h-3.5 text-assaiOrange"></i>';
+            else iconHtml = '<i data-lucide="sparkles" class="w-3.5 h-3.5 text-assaiGold"></i>';
+            
+            iconSlot.innerHTML = iconHtml;
+            lucide.createIcons();
+          }
+        }
+
+        // 3. WhatsApp Sticker Selectors
+        const stickerBtn = e.target.closest('[data-sticker-idx]');
+        if (stickerBtn) {
+          const parentCard = stickerBtn.closest('[data-slide-id="whatsapp"]');
+          const stIdx = parseInt(stickerBtn.getAttribute('data-sticker-idx'));
+
+          parentCard.querySelectorAll('[data-sticker-idx]').forEach(btn => {
+            btn.className = "bg-slate-950/40 border-white/5 text-slate-400 p-2 rounded-xl border text-[9px] font-bold block truncate hover:bg-slate-900/40";
+          });
+
+          const activeClasses = [
+            "bg-assaiBlue/40 border-assaiOrange text-white ring-1 ring-assaiOrange/25 p-2 rounded-xl border text-[9px] font-bold block truncate",
+            "bg-assaiBlue/44 border-pink-500 text-white ring-1 ring-pink-500/25 p-2 rounded-xl border text-[9px] font-bold block truncate",
+            "bg-assaiBlue/44 border-assaiGold text-white ring-1 ring-assaiGold/25 p-2 rounded-xl border text-[9px] font-bold block truncate"
+          ];
+          stickerBtn.className = activeClasses[stIdx];
+
+          const stickerSlot = parentCard.querySelector('.whatsapp-sticker-bubble-content');
+          if (stickerSlot) {
+            let stickerHtml = "";
+            if (stIdx === 0) {
+              stickerHtml = `
+                <span class="text-lg">🛒</span>
+                <span class="text-[7.5px] leading-none mt-0.5">Abastecido com o</span>
+                <span class="text-assaiYellow text-[8px] leading-tight font-black">Imbatível!</span>
+              `;
+            } else if (stIdx === 1) {
+              stickerHtml = `
+                <span class="text-lg">🏃‍♂️</span>
+                <span class="text-[7.5px] leading-none mt-0.5">Correndo pro</span>
+                <span class="text-assaiYellow text-[8px] leading-tight font-black">Assaí!</span>
+              `;
+            } else {
+              stickerHtml = `
+                <span class="text-lg">🔥</span>
+                <span class="text-[7.5px] leading-none mt-0.5">Preço baixo assim</span>
+                <span class="text-assaiYellow text-[8px] leading-tight font-black">só hoje!</span>
+              `;
+            }
+            stickerSlot.innerHTML = stickerHtml + `<div class="absolute -bottom-1 -right-1 bg-assaiOrange text-white text-[4px] px-1.2 py-0.2 rounded-full border border-white font-bold">Assaí</div>`;
+          }
+        }
+
+        // 4. Cronograma Table Column Filter
+        const filterBtn = e.target.closest('[data-cronograma-filter]');
+        if (filterBtn) {
+          const parentCard = filterBtn.closest('[data-slide-id="cronograma"]');
+          const value = filterBtn.getAttribute('data-cronograma-filter');
+
+          parentCard.querySelectorAll('[data-cronograma-filter]').forEach(btn => {
+            btn.className = "px-3 py-1 text-slate-400 hover:text-slate-200 text-[10px] font-bold rounded-lg transition-all";
+          });
+
+          if (value === "both") {
+            filterBtn.className = "px-3 py-1 bg-assaiOrange text-white text-[10px] font-bold rounded-lg transition-all";
+          } else {
+            filterBtn.className = "px-3 py-1 bg-assaiBlue text-white border border-assaiOrange/30 text-[10px] font-bold rounded-lg transition-all";
+          }
+
+          const th24 = parentCard.querySelectorAll('.col-dia-24-header');
+          const th25 = parentCard.querySelectorAll('.col-dia-25-header');
+          const td24 = parentCard.querySelectorAll('.col-dia-24-cell');
+          const td25 = parentCard.querySelectorAll('.col-dia-25-cell');
+
+          if (value === "both") {
+            th24.forEach(el => el.classList.remove('hidden'));
+            th25.forEach(el => el.classList.remove('hidden'));
+            td24.forEach(el => el.classList.remove('hidden'));
+            td25.forEach(el => el.classList.remove('hidden'));
+          } else if (value === "24") {
+            th24.forEach(el => el.classList.remove('hidden'));
+            th25.forEach(el => el.classList.add('hidden'));
+            td24.forEach(el => el.classList.remove('hidden'));
+            td25.forEach(el => el.classList.add('hidden'));
+          } else if (value === "25") {
+            th24.forEach(el => el.classList.add('hidden'));
+            th25.forEach(el => el.classList.remove('hidden'));
+            td24.forEach(el => el.classList.add('hidden'));
+            td25.forEach(el => el.classList.remove('hidden'));
+          }
+        }
+      });
+
+      // Init Load
+      window.addEventListener("DOMContentLoaded", () => {
+        renderSidebar();
+        renderDots();
+        renderReport();
+        goToSlide(0);
+        lucide.createIcons();
+      });
+    </script>
+  </body>
+</html>
